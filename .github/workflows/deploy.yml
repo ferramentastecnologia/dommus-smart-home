@@ -1,0 +1,56 @@
+name: Deploy to VPS
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Deploy with Docker to VPS
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VPS_HOST }}
+        username: ${{ secrets.VPS_USER }}
+        key: ${{ secrets.VPS_SSH_KEY }}
+        script: |
+          echo "🚀 Iniciando deploy Dommus com Docker..."
+
+          # Criar diretório se não existir
+          mkdir -p /opt/dommus
+
+          # Navegar até o diretório
+          cd /opt/dommus
+
+          # Se não tiver git inicializado, fazer clone
+          if [ ! -d ".git" ]; then
+            echo "📦 Clonando repositório..."
+            git clone git@github.com:ferramentastecnologia/dommus-smart-home.git .
+          else
+            echo "📥 Atualizando repositório..."
+            git pull origin main
+          fi
+
+          # Parar container anterior (se existir)
+          echo "🛑 Parando containers anteriores..."
+          docker-compose down 2>/dev/null || true
+
+          # Build e start containers
+          echo "🏗️  Construindo imagem Docker..."
+          docker-compose build
+
+          echo "🚀 Iniciando containers..."
+          docker-compose up -d
+
+          # Log de deploy
+          echo "✅ Deploy realizado em $(date)" >> deploy.log
+
+          # Mostrar status
+          echo "📊 Status dos containers:"
+          docker-compose ps
+
+          echo "🎉 Deploy concluído com sucesso!"

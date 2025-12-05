@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  dommus:
+    build: .
+    container_name: dommus-smart-home
+    restart: always
+    ports:
+      - "3000:3000"      # LP e aplicações web
+      - "8080:8080"      # APIs
+      - "5678:5678"      # N8N (se usar)
+    volumes:
+      - ./lp:/app/lp
+      - ./automacoes:/app/automacoes
+      - ./data:/app/data
+    environment:
+      - NODE_ENV=production
+    networks:
+      - dommus-network
+    labels:
+      - "com.dommus.description=Dommus Smart Home Project"
+
+networks:
+  dommus-network:
+    driver: bridge
