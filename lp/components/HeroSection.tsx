@@ -18,26 +18,33 @@ export default function HeroSection() {
   return (
     <section className="relative w-full pt-20 pb-32 overflow-hidden">
       {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-dommus-primary/10 via-dommus-secondary/5 to-dommus-accent/10" />
+      <div className="absolute inset-0 bg-gradient-to-br from-dommus-primary/5 via-white to-dommus-secondary/5" />
 
       {/* Animated background elements */}
       <motion.div
         animate={{
           scale: [1, 1.1, 1],
           rotate: [0, 10, 0],
+          x: [0, 20, 0],
         }}
         transition={{ duration: 20, repeat: Infinity }}
-        className="absolute top-10 right-20 w-72 h-72 bg-dommus-primary/10 rounded-full blur-3xl"
+        className="absolute top-10 right-20 w-72 h-72 bg-gradient-to-br from-dommus-primary/20 to-dommus-primary/5 rounded-full blur-3xl"
       />
 
       <motion.div
         animate={{
           scale: [1, 1.15, 1],
           rotate: [0, -15, 0],
+          x: [0, -30, 0],
         }}
         transition={{ duration: 25, repeat: Infinity }}
-        className="absolute bottom-20 left-10 w-96 h-96 bg-dommus-secondary/10 rounded-full blur-3xl"
+        className="absolute bottom-20 left-10 w-96 h-96 bg-gradient-to-br from-dommus-secondary/20 to-dommus-secondary/5 rounded-full blur-3xl"
       />
+
+      {/* Decorative grid */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,#667eea_1px,transparent_1px),linear-gradient(#667eea_1px,transparent_1px)] bg-[length:50px_50px]" />
+      </div>
 
       <div className="relative section-container z-10">
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -74,18 +81,20 @@ export default function HeroSection() {
               className="flex flex-col sm:flex-row gap-4 pt-4"
             >
               <motion.button
-                whileHover={{ scale: 1.05, boxShadow: '0 20px 25px rgba(107, 70, 193, 0.3)' }}
+                whileHover={{ scale: 1.05, boxShadow: '0 25px 50px rgba(107, 70, 193, 0.4)' }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-primary"
+                className="px-8 py-3 bg-gradient-to-r from-dommus-primary to-dommus-secondary text-white rounded-lg font-bold transition-all duration-300 hover:shadow-xl flex items-center justify-center gap-2"
               >
+                <span>🚀</span>
                 Começar Implementação
               </motion.button>
 
               <motion.button
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.05, boxShadow: '0 25px 50px rgba(16, 185, 129, 0.3)' }}
                 whileTap={{ scale: 0.95 }}
-                className="btn-secondary"
+                className="px-8 py-3 border-2 border-dommus-secondary text-dommus-secondary rounded-lg font-bold transition-all duration-300 hover:bg-dommus-secondary hover:text-white flex items-center justify-center gap-2"
               >
+                <span>📽️</span>
                 Ver Demonstração
               </motion.button>
             </motion.div>

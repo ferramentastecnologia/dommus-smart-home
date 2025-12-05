@@ -7,6 +7,10 @@ import ProcessCards from '@/components/ProcessCards';
 import Timeline from '@/components/Timeline';
 import TechStack from '@/components/TechStack';
 import KPIMetrics from '@/components/KPIMetrics';
+import Testimonials from '@/components/Testimonials';
+import FAQ from '@/components/FAQ';
+import Gallery from '@/components/Gallery';
+import CTA from '@/components/CTA';
 import Footer from '@/components/Footer';
 
 const containerVariants = {
@@ -32,8 +36,12 @@ export default function Home() {
       <HeroSection />
       <ProcessCards />
       <Timeline />
+      <Gallery />
       <TechStack />
       <KPIMetrics />
+      <Testimonials />
+      <FAQ />
+      <CTA />
       <Footer />
     </motion.main>
   );

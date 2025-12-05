@@ -77,34 +77,51 @@ export default function ProcessCards() {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid md:grid-cols-2 lg:grid-cols-5 gap-4"
+          className="grid md:grid-cols-2 lg:grid-cols-5 gap-6"
         >
           {processes.map((process, idx) => (
             <motion.div
               key={idx}
               variants={cardVariants}
-              whileHover={{ y: -8, boxShadow: '0 20px 40px rgba(107, 70, 193, 0.15)' }}
+              whileHover={{ y: -12, boxShadow: '0 30px 60px rgba(107, 70, 193, 0.25)' }}
               className="relative group"
             >
               {/* Connection line */}
               {idx < processes.length - 1 && (
-                <div className="hidden lg:block absolute top-16 -right-2 w-4 h-1 bg-gradient-to-r from-dommus-primary to-transparent" />
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  transition={{ delay: idx * 0.2, duration: 0.8 }}
+                  className="hidden lg:block absolute top-16 -right-3 w-6 h-1 bg-gradient-to-r from-dommus-primary via-dommus-secondary to-transparent origin-left"
+                />
               )}
 
-              <div className="h-full p-6 rounded-xl border border-gray-200 bg-white hover:bg-gradient-to-br hover:from-dommus-primary/5 hover:to-dommus-secondary/5 transition-all duration-300">
+              <div className="h-full p-6 rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-gray-50 hover:bg-gradient-to-br hover:from-dommus-primary/8 hover:to-dommus-secondary/8 transition-all duration-300 hover:border-dommus-primary">
                 {/* Step number */}
-                <div className="absolute -top-4 -left-4 w-10 h-10 bg-dommus-primary text-white rounded-full flex items-center justify-center font-bold shadow-lg">
+                <motion.div
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ delay: idx * 0.2, duration: 2, repeat: Infinity }}
+                  className="absolute -top-5 -left-4 w-10 h-10 bg-gradient-to-br from-dommus-primary to-dommus-secondary text-white rounded-full flex items-center justify-center font-bold shadow-xl"
+                >
                   {process.step}
-                </div>
+                </motion.div>
 
                 {/* Icon */}
-                <div className="text-5xl mb-4 transform group-hover:scale-110 transition-transform duration-300">
+                <div className="text-5xl mb-4 transform group-hover:scale-125 transition-transform duration-300 origin-center">
                   {process.icon}
                 </div>
 
                 {/* Content */}
                 <h3 className="text-lg font-bold text-gray-900 mb-2">{process.title}</h3>
                 <p className="text-sm text-gray-600 leading-relaxed">{process.description}</p>
+
+                {/* Bottom accent */}
+                <motion.div
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  transition={{ delay: idx * 0.2 + 0.3, duration: 0.8 }}
+                  className="h-1 bg-gradient-to-r from-dommus-primary to-dommus-secondary rounded-full mt-4 origin-left"
+                />
               </div>
             </motion.div>
           ))}
