@@ -2,7 +2,7 @@
 
 > **⚠️ FOCO ATUAL: Rosa Mexicano - Reservas (FASE 1)**
 > - ✅ Rosa Mexicano - Reservas: Implementado (Autenticação JWT + Caixa de Informação + Telegram)
-> - ✅ Mortadella - Reservas: Implementado (Mesma estrutura, pendente Telegram)
+> - 🔒 Mortadella - Reservas: STAND-BY (Mesma estrutura que Rosa, aguardando confirmação de design/funcionalidades com cliente)
 > - ⏳ Rosa Mexicano - Vouchers: FASE 2
 > - ⏳ Estilo Tulipa: FASE 3
 
@@ -60,7 +60,7 @@ DATABASE_URL=postgresql://user:password@host:5432/rosa-mexicano-vouchers
 
 ---
 
-## 3. MORTADELLA - RESERVAS (mortadellareservas)
+## 3. MORTADELLA - RESERVAS (mortadellareservas) - STAND-BY
 
 ### Netlify (Frontend + API Routes)
 ```
@@ -71,8 +71,6 @@ ASAAS_API_KEY=sua-chave-api-asaas-aqui
 ASAAS_WEBHOOK_TOKEN=seu-token-webhook-asaas-aqui
 SENDGRID_API_KEY=sua-chave-sendgrid-aqui
 NEXT_PUBLIC_API_URL=https://seu-dominio.netlify.app
-TELEGRAM_BOT_TOKEN=seu-token-do-bot-telegram-aqui
-TELEGRAM_CHAT_ID=seu-chat-id-telegram-aqui
 ```
 
 ### Railway (Banco de Dados)
@@ -141,23 +139,23 @@ PORT=3000
 - [ ] Testar endpoints de auth
 - [ ] Refatorar estrutura (controllers/services/routes)
 
-### ✅ Mortadella - Reservas
-**Autenticação e Segurança:**
-- [ ] JWT_SECRET e JWT_REFRESH_SECRET no Netlify
-- [ ] DATABASE_URL no Railway
-- [ ] ASAAS_API_KEY e ASAAS_WEBHOOK_TOKEN no Netlify
-- [ ] SENDGRID_API_KEY no Netlify
-- [ ] Testar login em `/api/admin/auth`
-- [ ] Testar refresh token em `/api/admin/auth/refresh`
-- [ ] Validar headers de segurança
+### 🔒 Mortadella - Reservas (STAND-BY)
+**Status:** Mesma estrutura de segurança que Rosa Mexicano implementada. Aguardando confirmação do cliente sobre design e funcionalidades específicas antes de prosseguir.
 
-**Novos Recursos (Fase 1):**
-- [ ] TELEGRAM_BOT_TOKEN no Netlify (obter via BotFather em t.me/botfather)
-- [ ] TELEGRAM_CHAT_ID no Netlify (ID do grupo/chat para receber alertas)
-- [ ] Implementar Caixa de Informação no pagamento (mesmo da Rosa Mexicano)
-- [ ] Implementar Alerta Telegram para reservas de última hora
-- [ ] Testar página `/pagamento` e verificar exibição da caixa de informação
-- [ ] Testar alerta Telegram criando uma reserva para hoje
+**Implementado:**
+- ✅ JWT_SECRET e JWT_REFRESH_SECRET configuráveis
+- ✅ DATABASE_URL configurável
+- ✅ ASAAS_API_KEY e ASAAS_WEBHOOK_TOKEN configuráveis
+- ✅ SENDGRID_API_KEY configurável
+- ✅ Autenticação JWT completa (`/api/admin/auth`)
+- ✅ Refresh token endpoint (`/api/admin/auth/refresh`)
+- ✅ Security headers e CORS
+
+**Pendente (aguardando requisitos do cliente):**
+- [ ] Confirmação de design/template frontend
+- [ ] Confirmação de funcionalidades específicas
+- [ ] Melhorias de UI/UX
+- [ ] Possível implementação de features similares ao Rosa (Caixa Info + Telegram)
 
 ### ⏳ Estilo Tulipa (FASE 3)
 - [ ] VITE_API_URL no Netlify (frontend)
