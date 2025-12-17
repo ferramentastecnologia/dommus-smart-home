@@ -1,5 +1,11 @@
 # Guia de Variáveis de Ambiente - Starken Projects
 
+> **⚠️ FOCO ATUAL: Rosa Mexicano - Reservas (FASE 1)**
+> - ✅ Rosa Mexicano - Reservas: Implementado (Autenticação JWT + Caixa de Informação + Telegram)
+> - ✅ Mortadella - Reservas: Implementado (Mesma estrutura, pendente Telegram)
+> - ⏳ Rosa Mexicano - Vouchers: FASE 2
+> - ⏳ Estilo Tulipa: FASE 3
+
 ## 📍 Plataformas de Deployment
 
 | Projeto | Frontend/App | Banco de Dados |
@@ -22,7 +28,6 @@ NEXT_PUBLIC_ASAAS_API_URL=https://api.asaas.com
 ASAAS_API_KEY=sua-chave-api-asaas-aqui
 ASAAS_WEBHOOK_TOKEN=seu-token-webhook-asaas-aqui
 SENDGRID_API_KEY=sua-chave-sendgrid-aqui
-WHATSAPP_API_KEY=sua-chave-whatsapp-aqui
 NEXT_PUBLIC_API_URL=https://seu-dominio.netlify.app
 TELEGRAM_BOT_TOKEN=seu-token-do-bot-telegram-aqui
 TELEGRAM_CHAT_ID=seu-chat-id-telegram-aqui
@@ -35,7 +40,7 @@ DATABASE_URL=postgresql://user:password@host:5432/rosamexicano-reservas
 
 ---
 
-## 2. ROSA MEXICANO - VOUCHERS (rosa-mexicano-vouchers)
+## 2. ROSA MEXICANO - VOUCHERS (rosa-mexicano-vouchers) - FASE 2
 
 ### Netlify (Express Backend)
 ```
@@ -44,7 +49,6 @@ JWT_REFRESH_SECRET=outro-valor-super-secreto-minimo-64-caracteres-random-aqui-09
 ASAAS_API_KEY=sua-chave-api-asaas-aqui
 ASAAS_WEBHOOK_TOKEN=seu-token-webhook-asaas-aqui
 SENDGRID_API_KEY=sua-chave-sendgrid-aqui
-WHATSAPP_API_KEY=sua-chave-whatsapp-aqui
 NODE_ENV=production
 PORT=3000
 ```
@@ -66,8 +70,9 @@ NEXT_PUBLIC_ASAAS_API_URL=https://api.asaas.com
 ASAAS_API_KEY=sua-chave-api-asaas-aqui
 ASAAS_WEBHOOK_TOKEN=seu-token-webhook-asaas-aqui
 SENDGRID_API_KEY=sua-chave-sendgrid-aqui
-WHATSAPP_API_KEY=sua-chave-whatsapp-aqui
 NEXT_PUBLIC_API_URL=https://seu-dominio.netlify.app
+TELEGRAM_BOT_TOKEN=seu-token-do-bot-telegram-aqui
+TELEGRAM_CHAT_ID=seu-chat-id-telegram-aqui
 ```
 
 ### Railway (Banco de Dados)
@@ -77,9 +82,9 @@ DATABASE_URL=postgresql://user:password@host:5432/mortadella-reservas
 
 ---
 
-## 4. ESTILO TULIPA (estilo-tulipa-frontend + backend)
+## 4. ESTILO TULIPA (estilo-tulipa-frontend + backend) - FASE 3
 
-### Firebase (Frontend - React + Vite - Fase 3)
+### Firebase (Frontend - React + Vite)
 ```
 VITE_API_URL=https://seu-api-backend-url-railway.com
 VITE_ASAAS_API_URL=https://api.asaas.com
@@ -91,7 +96,7 @@ VITE_FIREBASE_MESSAGING_SENDER_ID=seu-id-firebase
 VITE_FIREBASE_APP_ID=seu-app-id-firebase
 ```
 
-### Railway (Backend + Database - será criado em Fase 3)
+### Railway (Backend + Database)
 ```
 JWT_SECRET=seu-valor-super-secreto-minimo-64-caracteres-random-aqui-1234567890
 JWT_REFRESH_SECRET=outro-valor-super-secreto-minimo-64-caracteres-random-aqui-0987654321
@@ -127,27 +132,36 @@ PORT=3000
 - [ ] Testar alerta Telegram criando uma reserva para hoje
 - [ ] Configurar Telegram: criar bot com BotFather e obter chat ID do grupo/chat destino
 
-### ✅ Rosa Mexicano - Vouchers
+### ⏳ Rosa Mexicano - Vouchers (FASE 2)
 - [ ] JWT_SECRET e JWT_REFRESH_SECRET no Netlify
 - [ ] DATABASE_URL no Railway
 - [ ] ASAAS_API_KEY e ASAAS_WEBHOOK_TOKEN no Netlify
+- [ ] SENDGRID_API_KEY no Netlify
 - [ ] Migrar autenticação de plaintext para JWT
 - [ ] Testar endpoints de auth
 - [ ] Refatorar estrutura (controllers/services/routes)
 
 ### ✅ Mortadella - Reservas
+**Autenticação e Segurança:**
 - [ ] JWT_SECRET e JWT_REFRESH_SECRET no Netlify
 - [ ] DATABASE_URL no Railway
 - [ ] ASAAS_API_KEY e ASAAS_WEBHOOK_TOKEN no Netlify
 - [ ] SENDGRID_API_KEY no Netlify
-- [ ] WHATSAPP_API_KEY no Netlify
 - [ ] Testar login em `/api/admin/auth`
 - [ ] Testar refresh token em `/api/admin/auth/refresh`
 - [ ] Validar headers de segurança
 
-### ✅ Estilo Tulipa
+**Novos Recursos (Fase 1):**
+- [ ] TELEGRAM_BOT_TOKEN no Netlify (obter via BotFather em t.me/botfather)
+- [ ] TELEGRAM_CHAT_ID no Netlify (ID do grupo/chat para receber alertas)
+- [ ] Implementar Caixa de Informação no pagamento (mesmo da Rosa Mexicano)
+- [ ] Implementar Alerta Telegram para reservas de última hora
+- [ ] Testar página `/pagamento` e verificar exibição da caixa de informação
+- [ ] Testar alerta Telegram criando uma reserva para hoje
+
+### ⏳ Estilo Tulipa (FASE 3)
 - [ ] VITE_API_URL no Netlify (frontend)
-- [ ] Criar backend completo em Fase 3 no Railway
+- [ ] Criar backend completo no Railway
 - [ ] Implementar JWT authentication no backend
 - [ ] Integrar com Asaas para pagamentos
 - [ ] Criar API de produtos, carrinho, pedidos
