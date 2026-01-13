@@ -20,11 +20,12 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
   autoRotateSpeed = 4000,
   radius = 400
 }) => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [rotationAngle, setRotationAngle] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [direction, setDirection] = useState<'left' | 'right'>('right');
+
+  const anglePerItem = 360 / items.length;
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -33,25 +34,49 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Calculate current index from rotation angle (for dots indicator)
+  const getCurrentIndex = useCallback(() => {
+    const normalizedAngle = ((rotationAngle % 360) + 360) % 360;
+    return Math.round(normalizedAngle / anglePerItem) % items.length;
+  }, [rotationAngle, anglePerItem, items.length]);
+
   const nextSlide = useCallback(() => {
     if (isAnimating) return;
-    setDirection('right');
     setIsAnimating(true);
+    // Always add angle - continuous rotation to the right
+    setRotationAngle(prev => prev + anglePerItem);
     setTimeout(() => {
-      setCurrentIndex(prev => (prev + 1) % items.length);
       setIsAnimating(false);
-    }, 300);
-  }, [items.length, isAnimating]);
+    }, 500);
+  }, [isAnimating, anglePerItem]);
 
   const prevSlide = useCallback(() => {
     if (isAnimating) return;
-    setDirection('left');
     setIsAnimating(true);
+    // Always subtract angle - continuous rotation to the left
+    setRotationAngle(prev => prev - anglePerItem);
     setTimeout(() => {
-      setCurrentIndex(prev => (prev - 1 + items.length) % items.length);
       setIsAnimating(false);
-    }, 300);
-  }, [items.length, isAnimating]);
+    }, 500);
+  }, [isAnimating, anglePerItem]);
+
+  const goToSlide = useCallback((targetIndex: number) => {
+    if (isAnimating) return;
+    const currentIdx = getCurrentIndex();
+    if (targetIndex === currentIdx) return;
+
+    setIsAnimating(true);
+
+    // Calculate shortest path
+    let diff = targetIndex - currentIdx;
+    if (diff > items.length / 2) diff -= items.length;
+    if (diff < -items.length / 2) diff += items.length;
+
+    setRotationAngle(prev => prev + diff * anglePerItem);
+    setTimeout(() => {
+      setIsAnimating(false);
+    }, 500);
+  }, [isAnimating, getCurrentIndex, items.length, anglePerItem]);
 
   // Auto-play
   useEffect(() => {
@@ -60,17 +85,16 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
     return () => clearInterval(interval);
   }, [isAutoPlaying, autoRotateSpeed, nextSlide]);
 
-  const anglePerItem = 360 / items.length;
-
-  // Get visible items for mobile (current + neighbors)
-  const getVisibleItems = () => {
+  // Get visible items for mobile based on rotation
+  const getVisibleItemsForMobile = useCallback(() => {
+    const currentIdx = getCurrentIndex();
     const visible = [];
     for (let i = -1; i <= 1; i++) {
-      const index = (currentIndex + i + items.length) % items.length;
+      const index = ((currentIdx + i) % items.length + items.length) % items.length;
       visible.push({ ...items[index], position: i });
     }
     return visible;
-  };
+  }, [getCurrentIndex, items]);
 
   const renderItem = (item: CarouselItem) => {
     const isVideo = item.type === 'video';
@@ -83,12 +107,10 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
         rel="noopener noreferrer"
         className="group block w-full h-full"
         onClick={(e) => {
-          // Prevent navigation during animation
           if (isAnimating) e.preventDefault();
         }}
       >
         <div className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl bg-card/70 backdrop-blur-lg border border-border/50">
-          {/* Fixed aspect ratio container */}
           <div className="absolute inset-0">
             {isVideo ? (
               <video
@@ -113,14 +135,12 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
             )}
           </div>
 
-          {/* Video indicator */}
           {isVideo && (
             <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-black/50 flex items-center justify-center group-hover:opacity-0 transition-opacity z-10">
               <Play className="w-4 h-4 text-white fill-white" />
             </div>
           )}
 
-          {/* Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <p className="text-white text-sm line-clamp-2">{item.caption}</p>
@@ -134,9 +154,11 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
     );
   };
 
-  // Mobile Carousel
+  const currentIndex = getCurrentIndex();
+
+  // Mobile Carousel - horizontal sliding
   if (isMobile) {
-    const visibleItems = getVisibleItems();
+    const visibleItems = getVisibleItemsForMobile();
 
     return (
       <div
@@ -144,7 +166,6 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
         onTouchStart={() => setIsAutoPlaying(false)}
         onTouchEnd={() => setIsAutoPlaying(true)}
       >
-        {/* Navigation Arrows */}
         <button
           onClick={prevSlide}
           className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-10 h-10 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 flex items-center justify-center text-foreground hover:bg-primary/20 transition-all duration-300 shadow-lg"
@@ -161,27 +182,18 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Slides Container */}
         <div className="flex items-center justify-center h-[320px] px-12">
           <div className="relative w-full h-full flex items-center justify-center">
             {visibleItems.map((item) => {
-              let translateX = item.position * 100;
-              let scale = item.position === 0 ? 1 : 0.8;
-              let opacity = item.position === 0 ? 1 : 0.5;
-              let zIndex = item.position === 0 ? 10 : 5;
-
-              if (isAnimating) {
-                if (direction === 'right') {
-                  translateX -= 100;
-                } else {
-                  translateX += 100;
-                }
-              }
+              const scale = item.position === 0 ? 1 : 0.8;
+              const opacity = item.position === 0 ? 1 : 0.5;
+              const zIndex = item.position === 0 ? 10 : 5;
+              const translateX = item.position * 85;
 
               return (
                 <div
                   key={`${item.id}-${item.position}`}
-                  className="absolute w-[280px] aspect-square transition-all duration-300 ease-out"
+                  className="absolute w-[280px] aspect-square transition-all duration-500 ease-out"
                   style={{
                     transform: `translateX(${translateX}%) scale(${scale})`,
                     opacity,
@@ -195,15 +207,11 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
           </div>
         </div>
 
-        {/* Dots */}
         <div className="flex justify-center gap-2 mt-4">
           {items.map((_, idx) => (
             <button
               key={idx}
-              onClick={() => {
-                setDirection(idx > currentIndex ? 'right' : 'left');
-                setCurrentIndex(idx);
-              }}
+              onClick={() => goToSlide(idx)}
               className={`w-2 h-2 rounded-full transition-all duration-300 ${
                 idx === currentIndex
                   ? 'bg-primary w-6'
@@ -224,7 +232,6 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
       onMouseEnter={() => setIsAutoPlaying(false)}
       onMouseLeave={() => setIsAutoPlaying(true)}
     >
-      {/* Navigation Arrows */}
       <button
         onClick={prevSlide}
         className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-background/80 backdrop-blur-sm border border-border/50 flex items-center justify-center text-foreground hover:bg-primary/20 hover:border-primary/50 transition-all duration-300 shadow-lg"
@@ -241,7 +248,6 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
         <ChevronRight className="w-6 h-6" />
       </button>
 
-      {/* 3D Container */}
       <div
         className="h-[500px] flex items-center justify-center"
         style={{ perspective: '1500px' }}
@@ -250,14 +256,13 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
           className="relative w-full h-full transition-transform duration-500 ease-out"
           style={{
             transformStyle: 'preserve-3d',
-            transform: `rotateY(${-currentIndex * anglePerItem}deg)`,
+            transform: `rotateY(${-rotationAngle}deg)`,
           }}
         >
           {items.map((item, i) => {
             const itemAngle = i * anglePerItem;
             // Calculate visibility based on current rotation
-            const currentRotation = currentIndex * anglePerItem;
-            const relativeAngle = ((itemAngle - currentRotation) % 360 + 360) % 360;
+            const relativeAngle = ((itemAngle - (rotationAngle % 360) + 360) % 360);
             const normalizedAngle = relativeAngle > 180 ? 360 - relativeAngle : relativeAngle;
             const opacity = Math.max(0.2, 1 - (normalizedAngle / 120));
             const isVisible = normalizedAngle < 90;
@@ -284,12 +289,11 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
         </div>
       </div>
 
-      {/* Dots */}
       <div className="flex justify-center gap-2 mt-4">
         {items.map((_, idx) => (
           <button
             key={idx}
-            onClick={() => setCurrentIndex(idx)}
+            onClick={() => goToSlide(idx)}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
               idx === currentIndex
                 ? 'bg-primary w-6'
