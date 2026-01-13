@@ -72,7 +72,7 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
     return visible;
   };
 
-  const renderItem = (item: CarouselItem, index: number, is3D: boolean = false, angle: number = 0) => {
+  const renderItem = (item: CarouselItem) => {
     const isVideo = item.type === 'video';
 
     return (
@@ -81,44 +81,47 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
         href={item.permalink}
         target="_blank"
         rel="noopener noreferrer"
-        className="group block"
+        className="group block w-full h-full"
         onClick={(e) => {
           // Prevent navigation during animation
           if (isAnimating) e.preventDefault();
         }}
       >
         <div className="relative w-full h-full rounded-xl overflow-hidden shadow-2xl bg-card/70 backdrop-blur-lg border border-border/50">
-          {isVideo ? (
-            <video
-              src={item.imageUrl}
-              className="w-full h-full object-cover"
-              muted
-              loop
-              playsInline
-              onMouseEnter={(e) => e.currentTarget.play()}
-              onMouseLeave={(e) => {
-                e.currentTarget.pause();
-                e.currentTarget.currentTime = 0;
-              }}
-            />
-          ) : (
-            <img
-              src={item.imageUrl}
-              alt={item.caption}
-              className="w-full h-full object-cover"
-              loading="lazy"
-            />
-          )}
+          {/* Fixed aspect ratio container */}
+          <div className="absolute inset-0">
+            {isVideo ? (
+              <video
+                src={item.imageUrl}
+                className="absolute inset-0 w-full h-full object-cover"
+                muted
+                loop
+                playsInline
+                onMouseEnter={(e) => e.currentTarget.play()}
+                onMouseLeave={(e) => {
+                  e.currentTarget.pause();
+                  e.currentTarget.currentTime = 0;
+                }}
+              />
+            ) : (
+              <img
+                src={item.imageUrl}
+                alt={item.caption}
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            )}
+          </div>
 
           {/* Video indicator */}
           {isVideo && (
-            <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-black/50 flex items-center justify-center group-hover:opacity-0 transition-opacity">
+            <div className="absolute top-4 left-4 w-8 h-8 rounded-full bg-black/50 flex items-center justify-center group-hover:opacity-0 transition-opacity z-10">
               <Play className="w-4 h-4 text-white fill-white" />
             </div>
           )}
 
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
             <div className="absolute bottom-0 left-0 right-0 p-4">
               <p className="text-white text-sm line-clamp-2">{item.caption}</p>
             </div>
@@ -159,7 +162,7 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
         </button>
 
         {/* Slides Container */}
-        <div className="flex items-center justify-center h-[400px] px-12">
+        <div className="flex items-center justify-center h-[320px] px-12">
           <div className="relative w-full h-full flex items-center justify-center">
             {visibleItems.map((item) => {
               let translateX = item.position * 100;
@@ -178,14 +181,14 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
               return (
                 <div
                   key={`${item.id}-${item.position}`}
-                  className="absolute w-[280px] h-[350px] transition-all duration-300 ease-out"
+                  className="absolute w-[280px] aspect-square transition-all duration-300 ease-out"
                   style={{
                     transform: `translateX(${translateX}%) scale(${scale})`,
                     opacity,
                     zIndex,
                   }}
                 >
-                  {renderItem(item, 0)}
+                  {renderItem(item)}
                 </div>
               );
             })}
@@ -262,19 +265,19 @@ const Carousel3D: React.FC<Carousel3DProps> = ({
             return (
               <div
                 key={item.id}
-                className="absolute w-[300px] h-[380px]"
+                className="absolute w-[320px] h-[320px]"
                 style={{
                   transform: `rotateY(${itemAngle}deg) translateZ(${radius}px)`,
                   left: '50%',
                   top: '50%',
-                  marginLeft: '-150px',
-                  marginTop: '-190px',
+                  marginLeft: '-160px',
+                  marginTop: '-160px',
                   opacity: isVisible ? opacity : 0,
                   transition: 'opacity 0.3s ease',
                   pointerEvents: isVisible ? 'auto' : 'none',
                 }}
               >
-                {renderItem(item, i, true, itemAngle)}
+                {renderItem(item)}
               </div>
             );
           })}
