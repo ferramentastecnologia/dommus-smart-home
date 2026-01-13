@@ -5,65 +5,95 @@
     "posts": [
         {
             "id": "1",
-            "imageUrl": "/instagram/post1.png",
-            "caption": "Automação residencial de alto padrão",
+            "imageUrl": "/instagram/post1.jpg",
+            "type": "image",
+            "caption": "Projeto residencial com automação completa",
             "permalink": "https://www.instagram.com/reel/DSkzvKBgcBj/",
             "timestamp": "2025-01-13T12:00:00Z"
         },
         {
             "id": "2",
-            "imageUrl": "/instagram/post2.png",
-            "caption": "Soluções inteligentes para sua casa",
+            "imageUrl": "/instagram/post2.jpg",
+            "type": "image",
+            "caption": "Detalhes que fazem a diferença",
             "permalink": "https://www.instagram.com/reel/DQ5W1DeAXIa/",
             "timestamp": "2025-01-12T12:00:00Z"
         },
         {
             "id": "3",
-            "imageUrl": "/instagram/post3.png",
-            "caption": "Ambientes conectados e automatizados",
+            "imageUrl": "/instagram/post3.jpg",
+            "type": "image",
+            "caption": "Auditório corporativo com tecnologia de ponta",
             "permalink": "https://www.instagram.com/p/CmaQJwuL7QS/",
             "timestamp": "2025-01-11T12:00:00Z"
         },
         {
             "id": "4",
-            "imageUrl": "/instagram/post4.png",
-            "caption": "Tecnologia e conforto em harmonia",
+            "imageUrl": "/instagram/post4.jpg",
+            "type": "image",
+            "caption": "Soluções audiovisuais integradas",
             "permalink": "https://www.instagram.com/reel/DEXgP2mpQQd/",
             "timestamp": "2025-01-10T12:00:00Z"
         },
         {
             "id": "5",
-            "imageUrl": "/instagram/post5.png",
-            "caption": "Iluminação e som ambiente integrados",
+            "imageUrl": "/instagram/post5.jpg",
+            "type": "image",
+            "caption": "Iluminação profissional",
             "permalink": "https://www.instagram.com/reel/C7hvsQTpPKS/",
             "timestamp": "2025-01-09T12:00:00Z"
         },
         {
             "id": "6",
-            "imageUrl": "/instagram/post6.png",
-            "caption": "Projetos personalizados para cada cliente",
+            "imageUrl": "/instagram/post6.mp4",
+            "type": "video",
+            "caption": "Residência de alto padrão em Indaial",
             "permalink": "https://www.instagram.com/p/Cs6J7Nbrge8/",
             "timestamp": "2025-01-08T12:00:00Z"
+        },
+        {
+            "id": "7",
+            "imageUrl": "/instagram/post7.mp4",
+            "type": "video",
+            "caption": "Home theater com três zonas de áudio",
+            "permalink": "https://www.instagram.com/reel/Cnut9XhBV-t/",
+            "timestamp": "2025-01-07T12:00:00Z"
+        },
+        {
+            "id": "8",
+            "imageUrl": "/instagram/post8.mp4",
+            "type": "video",
+            "caption": "Sala de cinema 5.1",
+            "permalink": "https://www.instagram.com/reel/Cnp8aqMhnC9/",
+            "timestamp": "2025-01-06T12:00:00Z"
+        },
+        {
+            "id": "9",
+            "imageUrl": "/instagram/post9.mp4",
+            "type": "video",
+            "caption": "Home Theater com vista para o mar",
+            "permalink": "https://www.instagram.com/reel/Cki2Ci4JiGz/",
+            "timestamp": "2025-01-05T12:00:00Z"
         }
     ],
     "projectPosts": [
         {
             "id": "proj1",
-            "imageUrl": "/instagram/proj1.png",
+            "imageUrl": "/instagram/proj1.jpg",
             "permalink": "https://www.instagram.com/reel/Cnut9XhBV-t/",
             "category": "residencial"
         },
         {
             "id": "proj2",
-            "imageUrl": "/instagram/proj2.png",
+            "imageUrl": "/instagram/proj2.jpg",
             "permalink": "https://www.instagram.com/reel/Cnp8aqMhnC9/",
-            "category": "academia"
+            "category": "corporativo"
         },
         {
             "id": "proj3",
-            "imageUrl": "/instagram/proj3.png",
+            "imageUrl": "/instagram/proj3.jpg",
             "permalink": "https://www.instagram.com/reel/Cki2Ci4JiGz/",
-            "category": "corporativo"
+            "category": "residencial"
         }
     ]
 }

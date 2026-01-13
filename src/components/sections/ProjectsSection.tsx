@@ -13,14 +13,14 @@ const projects = [
   {
     image: instagramData.projectPosts[1].imageUrl,
     permalink: instagramData.projectPosts[1].permalink,
-    title: "Academia Duifit",
-    description: "Sonorização profissional completa"
+    title: "Ambientes Corporativos",
+    description: "Auditórios e salas de reunião inteligentes"
   },
   {
     image: instagramData.projectPosts[2].imageUrl,
     permalink: instagramData.projectPosts[2].permalink,
-    title: "Ambientes Corporativos",
-    description: "Soluções audiovisuais integradas"
+    title: "Home Theaters",
+    description: "Experiência cinematográfica em casa"
   }
 ];
 

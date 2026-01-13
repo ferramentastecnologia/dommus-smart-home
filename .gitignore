@@ -26,3 +26,6 @@ dist-ssr
 
 # Documentação local (não subir para o repo)
 docs/
+
+# Downloads originais do Instagram
+public/instagram/posts-downloaded/
