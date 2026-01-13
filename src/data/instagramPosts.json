@@ -1,55 +1,69 @@
 {
-    "lastUpdated": "2025-12-30T15:00:00Z",
+    "lastUpdated": "2025-01-13T12:00:00Z",
     "instagramHandle": "dommus.smarthome",
     "profileUrl": "https://www.instagram.com/dommus.smarthome/",
     "posts": [
         {
             "id": "1",
             "imageUrl": "/instagram/post1.png",
-            "caption": "Sala de estar com automação inteligente ✨ Iluminação LED integrada, home theater premium e cortinas automatizadas.",
-            "permalink": "https://www.instagram.com/dommus.smarthome/",
-            "likes": 87,
-            "timestamp": "2025-12-28T14:30:00Z"
+            "caption": "Automação residencial de alto padrão",
+            "permalink": "https://www.instagram.com/reel/DSkzvKBgcBj/",
+            "timestamp": "2025-01-13T12:00:00Z"
         },
         {
             "id": "2",
             "imageUrl": "/instagram/post2.png",
-            "caption": "Central de controle residencial 🏠 Toda sua casa na palma da mão!",
-            "permalink": "https://www.instagram.com/dommus.smarthome/",
-            "likes": 124,
-            "timestamp": "2025-12-25T10:00:00Z"
+            "caption": "Soluções inteligentes para sua casa",
+            "permalink": "https://www.instagram.com/reel/DQ5W1DeAXIa/",
+            "timestamp": "2025-01-12T12:00:00Z"
         },
         {
             "id": "3",
             "imageUrl": "/instagram/post3.png",
-            "caption": "Área externa inteligente 🌅 Pergolado automatizado, som ambiente e iluminação cênica.",
-            "permalink": "https://www.instagram.com/dommus.smarthome/",
-            "likes": 156,
-            "timestamp": "2025-12-22T16:45:00Z"
+            "caption": "Ambientes conectados e automatizados",
+            "permalink": "https://www.instagram.com/p/CmaQJwuL7QS/",
+            "timestamp": "2025-01-11T12:00:00Z"
         },
         {
             "id": "4",
             "imageUrl": "/instagram/post4.png",
-            "caption": "Cozinha gourmet conectada 🍳 Áudio integrado e automação completa.",
-            "permalink": "https://www.instagram.com/dommus.smarthome/",
-            "likes": 98,
-            "timestamp": "2025-12-20T11:20:00Z"
+            "caption": "Tecnologia e conforto em harmonia",
+            "permalink": "https://www.instagram.com/reel/DEXgP2mpQQd/",
+            "timestamp": "2025-01-10T12:00:00Z"
         },
         {
             "id": "5",
             "imageUrl": "/instagram/post5.png",
-            "caption": "Rack técnico 🔧 Infraestrutura profissional para projetos de alto padrão.",
-            "permalink": "https://www.instagram.com/dommus.smarthome/",
-            "likes": 203,
-            "timestamp": "2025-12-18T09:00:00Z"
+            "caption": "Iluminação e som ambiente integrados",
+            "permalink": "https://www.instagram.com/reel/C7hvsQTpPKS/",
+            "timestamp": "2025-01-09T12:00:00Z"
         },
         {
             "id": "6",
             "imageUrl": "/instagram/post6.png",
-            "caption": "Home Theater Dolby Atmos 🎬 A experiência cinematográfica perfeita em casa.",
-            "permalink": "https://www.instagram.com/dommus.smarthome/",
-            "likes": 178,
-            "timestamp": "2025-12-15T15:30:00Z"
+            "caption": "Projetos personalizados para cada cliente",
+            "permalink": "https://www.instagram.com/p/Cs6J7Nbrge8/",
+            "timestamp": "2025-01-08T12:00:00Z"
+        }
+    ],
+    "projectPosts": [
+        {
+            "id": "proj1",
+            "imageUrl": "/instagram/proj1.png",
+            "permalink": "https://www.instagram.com/reel/Cnut9XhBV-t/",
+            "category": "residencial"
+        },
+        {
+            "id": "proj2",
+            "imageUrl": "/instagram/proj2.png",
+            "permalink": "https://www.instagram.com/reel/Cnp8aqMhnC9/",
+            "category": "academia"
+        },
+        {
+            "id": "proj3",
+            "imageUrl": "/instagram/proj3.png",
+            "permalink": "https://www.instagram.com/reel/Cki2Ci4JiGz/",
+            "category": "corporativo"
         }
     ]
 }

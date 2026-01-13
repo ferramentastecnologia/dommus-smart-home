@@ -1,23 +1,24 @@
 import { cn } from "@/lib/utils";
 import ScrollReveal from "@/components/ui/ScrollReveal";
 import LazyImage from "@/components/ui/LazyImage";
-import smartLivingRoom from "@/assets/smart-living-room.jpg";
-import gymAudio from "@/assets/gym-audio.jpg";
-import corporateAv from "@/assets/corporate-av.jpg";
+import instagramData from "@/data/instagramPosts.json";
 
 const projects = [
   {
-    image: smartLivingRoom,
+    image: instagramData.projectPosts[0].imageUrl,
+    permalink: instagramData.projectPosts[0].permalink,
     title: "Residências de Alto Padrão",
     description: "Automação completa com controle integrado"
   },
   {
-    image: gymAudio,
+    image: instagramData.projectPosts[1].imageUrl,
+    permalink: instagramData.projectPosts[1].permalink,
     title: "Academia Duifit",
     description: "Sonorização profissional completa"
   },
   {
-    image: corporateAv,
+    image: instagramData.projectPosts[2].imageUrl,
+    permalink: instagramData.projectPosts[2].permalink,
     title: "Ambientes Corporativos",
     description: "Soluções audiovisuais integradas"
   }
@@ -39,9 +40,12 @@ const ProjectsSection = () => {
         <div className="grid md:grid-cols-3 gap-6">
           {projects.map((project, index) => (
             <ScrollReveal key={project.title} animation="scale-in" delay={index * 150}>
-              <div
+              <a
+                href={project.permalink}
+                target="_blank"
+                rel="noopener noreferrer"
                 className={cn(
-                  "group relative rounded-2xl overflow-hidden cursor-pointer"
+                  "group relative rounded-2xl overflow-hidden cursor-pointer block"
                 )}
               >
                 {/* Lazy loaded image */}
@@ -66,7 +70,7 @@ const ProjectsSection = () => {
 
                 {/* Border glow on hover */}
                 <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-primary/30 transition-all duration-300" />
-              </div>
+              </a>
             </ScrollReveal>
           ))}
         </div>

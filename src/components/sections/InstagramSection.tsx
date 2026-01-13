@@ -1,4 +1,4 @@
-import { Instagram, Heart, ExternalLink } from "lucide-react";
+import { Instagram, ExternalLink } from "lucide-react";
 import instagramData from "@/data/instagramPosts.json";
 
 interface InstagramPost {
@@ -6,7 +6,6 @@ interface InstagramPost {
     imageUrl: string;
     caption: string;
     permalink: string;
-    likes: number;
     timestamp: string;
 }
 
@@ -55,12 +54,6 @@ const InstagramSection = () => {
 
                             {/* Overlay */}
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex flex-col justify-end p-4">
-                                {/* Likes */}
-                                <div className="flex items-center gap-2 text-white mb-2">
-                                    <Heart className="w-4 h-4 fill-red-500 text-red-500" />
-                                    <span className="text-sm font-medium">{post.likes}</span>
-                                </div>
-
                                 {/* Caption */}
                                 <p className="text-white text-sm line-clamp-2">
                                     {post.caption}
