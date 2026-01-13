@@ -1,30 +1,32 @@
-import { cn } from "@/lib/utils";
 import ScrollReveal from "@/components/ui/ScrollReveal";
-import LazyImage from "@/components/ui/LazyImage";
-import instagramData from "@/data/instagramPosts.json";
+import { useEffect } from "react";
 
 const projects = [
   {
-    image: instagramData.projectPosts[0].imageUrl,
-    permalink: instagramData.projectPosts[0].permalink,
+    permalink: "https://www.instagram.com/reel/Cnut9XhBV-t/",
     title: "Residências de Alto Padrão",
     description: "Automação completa com controle integrado"
   },
   {
-    image: instagramData.projectPosts[1].imageUrl,
-    permalink: instagramData.projectPosts[1].permalink,
+    permalink: "https://www.instagram.com/reel/Cnp8aqMhnC9/",
     title: "Academia Duifit",
     description: "Sonorização profissional completa"
   },
   {
-    image: instagramData.projectPosts[2].imageUrl,
-    permalink: instagramData.projectPosts[2].permalink,
+    permalink: "https://www.instagram.com/reel/Cki2Ci4JiGz/",
     title: "Ambientes Corporativos",
     description: "Soluções audiovisuais integradas"
   }
 ];
 
 const ProjectsSection = () => {
+  useEffect(() => {
+    // Process Instagram embeds
+    if ((window as any).instgrm) {
+      (window as any).instgrm.Embeds.process();
+    }
+  }, []);
+
   return (
     <section id="projetos" className="py-24 bg-card relative overflow-hidden">
       <div className="container mx-auto px-4 relative z-10">
@@ -40,37 +42,28 @@ const ProjectsSection = () => {
         <div className="grid md:grid-cols-3 gap-6">
           {projects.map((project, index) => (
             <ScrollReveal key={project.title} animation="scale-in" delay={index * 150}>
-              <a
-                href={project.permalink}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={cn(
-                  "group relative rounded-2xl overflow-hidden cursor-pointer block"
-                )}
-              >
-                {/* Lazy loaded image */}
-                <div className="aspect-[4/3] overflow-hidden">
-                  <LazyImage
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full transition-transform duration-700 group-hover:scale-110"
+              <div className="text-center">
+                <h3 className="font-heading text-xl font-semibold text-foreground mb-2">
+                  {project.title}
+                </h3>
+                <p className="text-sm text-muted-foreground mb-4">{project.description}</p>
+                <div className="flex justify-center">
+                  <blockquote
+                    className="instagram-media"
+                    data-instgrm-permalink={project.permalink}
+                    data-instgrm-version="14"
+                    style={{
+                      background: "#FFF",
+                      border: "0",
+                      borderRadius: "12px",
+                      margin: "0",
+                      maxWidth: "400px",
+                      minWidth: "280px",
+                      width: "100%",
+                    }}
                   />
                 </div>
-
-                {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
-
-                {/* Content */}
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="font-heading text-xl font-semibold text-foreground mb-1 group-hover:text-gradient transition-all duration-300">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">{project.description}</p>
-                </div>
-
-                {/* Border glow on hover */}
-                <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-primary/30 transition-all duration-300" />
-              </a>
+              </div>
             </ScrollReveal>
           ))}
         </div>
