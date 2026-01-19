@@ -1,0 +1,232 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    /* ProFortuna primary color - Teal */
+    --primary: 174 100% 33%;
+    --primary-foreground: 210 40% 98%;
+
+    /* Light teal secondary */
+    --secondary: 187 71% 54%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    /* Light teal accent */
+    --accent: 187 71% 94%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    /* Keep destructive red */
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 174 100% 33%;
+
+    --radius: 0.75rem;
+
+    /* Sidebar with ProFortuna blue tones */
+    --sidebar-background: 198 100% 36% / 10%;
+    --sidebar-foreground: 198 100% 28%;
+    --sidebar-primary: 198 100% 36%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 198 100% 36% / 20%;
+    --sidebar-accent-foreground: 198 100% 20%;
+    --sidebar-border: 198 33% 91%;
+    --sidebar-ring: 198 100% 36%;
+  }
+
+  .dark {
+    /* Dark navy background from the screenshot */
+    --background: 215 57% 7%;
+    --foreground: 210 40% 98%;
+
+    /* Card backgrounds slightly lighter than main background */
+    --card: 215 57% 12%;
+    --card-foreground: 210 40% 98%;
+
+    /* Popover similar to cards */
+    --popover: 215 57% 12%;
+    --popover-foreground: 210 40% 98%;
+
+    /* Increase primary brightness for better visibility in dark mode, mas não tão brilhante */
+    --primary: 174 60% 45%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Dark mode ProFortuna secondary - blue - menos brilhante */
+    --secondary: 198 80% 45%;
+    --secondary-foreground: 210 40% 98%;
+
+    /* Muted colors for dark theme */
+    --muted: 215 57% 18%;
+    --muted-foreground: 215 20% 75%;
+
+    /* Dark accent colors */
+    --accent: 215 57% 18%;
+    --accent-foreground: 210 40% 98%;
+
+    /* Destructive colors for dark mode */
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 210 40% 98%;
+
+    /* Border and input colors for dark mode */
+    --border: 215 57% 18%;
+    --input: 215 57% 18%;
+    --ring: 174 76% 55%;
+    
+    /* Dark sidebar - matching the navy theme from screenshot */
+    --sidebar-background: 210 50% 12%;
+    --sidebar-foreground: 210 20% 90%;
+    --sidebar-primary: 174 76% 55%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 50% 18%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 50% 18%;
+    --sidebar-ring: 174 76% 55%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    background-image: linear-gradient(180deg, rgba(54, 209, 220, 0.1) 0%, rgba(0, 169, 157, 0.05) 100%);
+    background-attachment: fixed;
+  }
+
+  /* Remove background gradient in dark mode */
+  .dark body {
+    background-image: none;
+  }
+}
+
+/* Melhorar barras de rolagem no modo escuro */
+@layer utilities {
+  /* Estilizar scrollbar em navegadores webkit */
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 20px;
+  }
+
+  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary) / 30%);
+  }
+
+  /* Scrollbar para elementos horizontais */
+  .scrollbar-horizontal {
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .scrollbar-horizontal::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  .scrollbar-horizontal::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .scrollbar-horizontal::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 20px;
+  }
+  
+  .dark .scrollbar-horizontal::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--primary) / 30%);
+  }
+}
+
+/* Auth background with ProFortuna gradient */
+.auth-background {
+  background-image: linear-gradient(180deg, rgba(0, 119, 182, 0.05) 0%, rgba(54, 209, 220, 0.2) 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dark mode auth background */
+.dark .auth-background {
+  background-image: none;
+  background-color: hsl(215 57% 7%);
+}
+
+/* Input styles with ProFortuna colors */
+.profortuna-input {
+  @apply rounded-full px-4 py-3 border border-gray-200 bg-white text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-profortuna-teal focus:border-profortuna-teal transition-all;
+}
+
+.dark .profortuna-input {
+  @apply border-gray-700 bg-gray-800 text-gray-100;
+}
+
+/* Button styles with ProFortuna colors */
+.profortuna-button {
+  @apply rounded-full px-8 py-3 bg-profortuna-teal text-white font-medium hover:bg-profortuna-blue transition-colors shadow-sm hover:shadow;
+}
+
+/* Cards with ProFortuna style */
+.profortuna-card {
+  @apply bg-card rounded-xl shadow-md p-4 border border-border hover:shadow-lg transition-shadow;
+}
+
+/* Icon containers with ProFortuna colors */
+.profortuna-icon-container {
+  @apply bg-primary/10 rounded-lg p-2 flex items-center justify-center;
+}
+
+.profortuna-gradient-text {
+  @apply bg-gradient-to-r from-profortuna-blue to-profortuna-teal bg-clip-text text-transparent;
+}
+
+/* Hover effects */
+.profortuna-hover-effect {
+  @apply transition-all duration-300 hover:scale-105;
+}
+
+/* Action buttons with ProFortuna colors */
+.profortuna-action-button {
+  @apply rounded-full px-6 py-2 bg-profortuna-teal text-white font-medium hover:bg-profortuna-blue transition-colors shadow-sm flex items-center justify-center gap-2;
+}
+
+/* Badges with ProFortuna colors */
+.profortuna-badge {
+  @apply bg-primary/10 text-primary text-xs font-medium rounded-full px-3 py-1;
+}
+
+/* Transition effects */
+.profortuna-transition {
+  @apply transition-all duration-300 ease-in-out;
+}

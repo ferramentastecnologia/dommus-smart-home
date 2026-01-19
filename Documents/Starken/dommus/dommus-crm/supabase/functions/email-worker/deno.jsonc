@@ -1,0 +1,18 @@
+{
+  "tasks": {
+    "dev": "deno run --allow-net --allow-env index.ts",
+    "deploy": "supabase functions deploy --no-verify-jwt email-worker",
+    "deploy-cron": "supabase functions deploy-cron crontab.ts"
+  },
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": false,
+    "lib": ["deno.window"]
+  },
+  "lint": {
+    "rules": {
+      "exclude": ["no-explicit-any", "no-unused-vars"]
+    }
+  },
+  "importMap": "../import_map.json"
+} 

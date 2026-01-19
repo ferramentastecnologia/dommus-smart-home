@@ -1,0 +1,12 @@
+ProFortuna Group Logo
+
+For the actual implementation, please:
+
+1. Download the logo image from the image shared by the client
+2. Save it as "profortuna-logo.png" in this public directory
+3. The SVG fallback will be used if this image is not available
+
+The image should match the blue-teal gradient colors seen in the reference image.
+
+Blue colors: #0077B6, #0096C7
+Teal colors: #00A99D, #36D1DC 
