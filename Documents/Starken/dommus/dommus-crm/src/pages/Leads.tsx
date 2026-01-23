@@ -117,16 +117,17 @@ export default function Leads() {
       try {
         const updatedLead = await updateLeadStatus(leadId, status);
         console.log("Lead status updated successfully:", updatedLead);
-        
+
         // Forçar atualização da lista de leads para garantir sincronização
         fetchLeads();
+        toast.success("Status atualizado com sucesso!");
       } catch (error) {
         console.error("Error updating lead status:", error);
-        toast.error("Failed to update lead status");
+        toast.error("Erro ao atualizar status do lead");
       }
     } catch (err) {
       console.error("Error in handleStatusChange:", err);
-      toast.error("There was an error updating the lead status");
+      toast.error("Erro ao atualizar status do lead");
     }
   };
 
@@ -140,10 +141,10 @@ export default function Leads() {
   const handleDeleteLead = async (leadId: string) => {
     try {
       await deleteLead(leadId);
-      toast.success("Lead deleted successfully");
+      toast.success("Lead excluído com sucesso!");
     } catch (error) {
       console.error("Error deleting lead:", error);
-      toast.error("Failed to delete lead");
+      toast.error("Erro ao excluir lead");
     }
   };
   
@@ -168,10 +169,10 @@ export default function Leads() {
 
       await addLead(newLead);
       setIsAddLeadOpen(false);
-      toast.success("Lead created successfully");
+      toast.success("Lead criado com sucesso!");
     } catch (error) {
       console.error("Error creating lead:", error);
-      toast.error("Failed to create lead");
+      toast.error("Erro ao criar lead");
     }
   };
   
@@ -244,23 +245,23 @@ export default function Leads() {
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Leads</h1>
             <p className="text-muted-foreground">
-              Manage your leads and sales opportunities
+              Gerencie seus leads e oportunidades de vendas
             </p>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex gap-1 border rounded-md">
-              <Button 
-                variant={viewMode === "list" ? "default" : "ghost"} 
-                size="sm" 
+              <Button
+                variant={viewMode === "list" ? "default" : "ghost"}
+                size="sm"
                 onClick={() => setViewMode("list")}
                 className="rounded-r-none"
               >
                 <List className="h-4 w-4 mr-1" />
-                List
+                Lista
               </Button>
-              <Button 
-                variant={viewMode === "kanban" ? "default" : "ghost"} 
-                size="sm" 
+              <Button
+                variant={viewMode === "kanban" ? "default" : "ghost"}
+                size="sm"
                 onClick={() => setViewMode("kanban")}
                 className="rounded-l-none"
               >
@@ -270,7 +271,7 @@ export default function Leads() {
             </div>
             <Button onClick={handleOpenAddLeadDialog}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Lead
+              Novo Lead
             </Button>
           </div>
         </div>

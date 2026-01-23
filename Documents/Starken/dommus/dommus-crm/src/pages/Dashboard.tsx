@@ -238,19 +238,45 @@ export default function Dashboard() {
 
         // Calculate leads by status - preserving casing from the status name
         const leadsByStatus: Record<string, number> = {};
-        
+
         // Initialize all status counts with zero
         leadStatusConfigs.forEach(status => {
           leadsByStatus[status.name] = 0;
         });
-        
-        // Count leads by their status
+
+        // Count leads by their status (suporta status_id ou campo status texto)
         leads?.forEach(lead => {
+          let statusName: string | null = null;
+
+          // Primeiro tenta pelo status_id (UUID)
           if (lead.status_id) {
             const status = statusMap.get(lead.status_id);
             if (status && status.name) {
-              leadsByStatus[status.name] += 1;
+              statusName = status.name;
             }
+          }
+
+          // Se não encontrou pelo status_id, tenta pelo campo status (texto)
+          if (!statusName && lead.status) {
+            // Verifica se o status é um nome válido
+            const matchingStatus = leadStatusConfigs.find(
+              s => s.name.toLowerCase() === lead.status.toLowerCase()
+            );
+            if (matchingStatus) {
+              statusName = matchingStatus.name;
+            }
+          }
+
+          // Fallback para "Novo" se não encontrou nenhum status
+          if (!statusName) {
+            statusName = 'Novo';
+          }
+
+          if (leadsByStatus[statusName] !== undefined) {
+            leadsByStatus[statusName] += 1;
+          } else {
+            // Se o status não existe na config, inicializa
+            leadsByStatus[statusName] = 1;
           }
         });
         
@@ -278,8 +304,19 @@ export default function Dashboard() {
 
         // Helper function to check if a lead is converted
         const isLeadConverted = (lead: any) => {
-          const status = statusMap.get(lead.status_id);
-          return status?.is_converted === true;
+          // Primeiro tenta pelo status_id
+          if (lead.status_id) {
+            const status = statusMap.get(lead.status_id);
+            if (status?.is_converted === true) return true;
+          }
+          // Fallback: verifica pelo nome do status
+          if (lead.status) {
+            const matchingStatus = leadStatusConfigs.find(
+              s => s.name.toLowerCase() === lead.status.toLowerCase()
+            );
+            if (matchingStatus?.is_converted === true) return true;
+          }
+          return false;
         };
 
         setDashboardData({

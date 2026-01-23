@@ -18,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				heading: ['Space Grotesk', 'sans-serif'],
+				body: ['Inter', 'sans-serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -52,6 +56,9 @@ export default {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
 				},
+				glow: {
+					DEFAULT: 'hsl(var(--glow-primary))',
+				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
 					foreground: 'hsl(var(--sidebar-foreground))',
@@ -62,15 +69,15 @@ export default {
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
 				},
-				// ProFortuna colors
-				profortuna: {
-					blue: {
-						DEFAULT: '#0077B6',
-						light: '#0096C7'
+				// Dommus brand colors
+				dommus: {
+					purple: {
+						DEFAULT: 'hsl(270 60% 55%)',
+						light: 'hsl(270 70% 60%)'
 					},
-					teal: {
-						DEFAULT: '#00A99D',
-						light: '#36D1DC'
+					violet: {
+						DEFAULT: 'hsl(280 80% 40%)',
+						light: 'hsl(280 70% 50%)'
 					}
 				}
 			},
@@ -78,6 +85,20 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			backgroundImage: {
+				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+				'gradient-premium': 'linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--accent)) 100%)',
+				'gradient-dark': 'linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--card)) 100%)',
+				'gradient-glow': 'radial-gradient(ellipse at center, hsl(var(--primary) / 0.15) 0%, transparent 70%)',
+				'gradient-dommus': 'linear-gradient(90deg, hsl(270 60% 55%) 0%, hsl(270 70% 60%) 50%, hsl(280 80% 40%) 100%)'
+			},
+			boxShadow: {
+				'glow': '0 0 40px hsl(var(--primary) / 0.3)',
+				'glow-lg': '0 0 60px hsl(var(--primary) / 0.4)',
+				'glow-xl': '0 0 80px hsl(var(--primary) / 0.5)',
+				'card': '0 4px 20px hsl(var(--background) / 0.5)',
+				'card-hover': '0 8px 40px hsl(var(--primary) / 0.2)',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -95,14 +116,40 @@ export default {
 					to: {
 						height: '0'
 					}
-				}
+				},
+				"pulse-glow": {
+					"0%, 100%": { opacity: "0.4" },
+					"50%": { opacity: "1" },
+				},
+				"float": {
+					"0%, 100%": { transform: "translateY(0px)" },
+					"50%": { transform: "translateY(-10px)" },
+				},
+				"glow-pulse": {
+					"0%, 100%": {
+						boxShadow: "0 0 20px hsl(var(--primary) / 0.3), 0 0 40px hsl(var(--primary) / 0.1)"
+					},
+					"50%": {
+						boxShadow: "0 0 40px hsl(var(--primary) / 0.5), 0 0 80px hsl(var(--primary) / 0.2)"
+					},
+				},
+				"shimmer": {
+					"0%": { backgroundPosition: "-200% 0" },
+					"100%": { backgroundPosition: "200% 0" },
+				},
+				"icon-bounce": {
+					"0%, 100%": { transform: "translateY(0) scale(1)" },
+					"50%": { transform: "translateY(-3px) scale(1.05)" },
+				},
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
-			},
-			backgroundImage: {
-				'gradient-profortuna': 'linear-gradient(90deg, #0077B6 0%, #00A99D 50%, #36D1DC 100%)'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				"pulse-glow": "pulse-glow 3s ease-in-out infinite",
+				"float": "float 6s ease-in-out infinite",
+				"glow-pulse": "glow-pulse 4s ease-in-out infinite",
+				"shimmer": "shimmer 3s ease-in-out infinite",
+				"icon-bounce": "icon-bounce 2s ease-in-out infinite",
 			}
 		}
 	},

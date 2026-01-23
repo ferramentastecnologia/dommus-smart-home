@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -7,6 +7,8 @@ import { useProjectsData } from "@/hooks/useProjectsData";
 import { Skeleton } from "@/components/ui/skeleton";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import { ProjectDetailsDialog } from "./ProjectDetailsDialog";
+import { Project } from "@/types/crm";
 
 interface ProjectsKanbanProps {
   searchTerm: string;
@@ -23,7 +25,14 @@ const columns = [
 ];
 
 export function ProjectsKanban({ searchTerm, statusFilter, typeFilter }: ProjectsKanbanProps) {
-  const { projects, loading, updateProjectStatus } = useProjectsData();
+  const { projects, loading, updateProjectStatus, fetchProjects } = useProjectsData();
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleProjectClick = (project: Project) => {
+    setSelectedProject(project);
+    setShowDetails(true);
+  };
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
@@ -80,6 +89,7 @@ export function ProjectsKanban({ searchTerm, statusFilter, typeFilter }: Project
                 <Card
                   key={project.id}
                   className="cursor-pointer hover:shadow-md transition-shadow"
+                  onClick={() => handleProjectClick(project)}
                 >
                   <CardHeader className="p-4 pb-2">
                     <CardTitle className="text-sm font-medium line-clamp-1">
@@ -136,6 +146,15 @@ export function ProjectsKanban({ searchTerm, statusFilter, typeFilter }: Project
           </div>
         );
       })}
+
+      {/* Project Details Dialog */}
+      <ProjectDetailsDialog
+        project={selectedProject}
+        open={showDetails}
+        onOpenChange={setShowDetails}
+        onSave={() => fetchProjects()}
+        startInEditMode={true}
+      />
     </div>
   );
 }

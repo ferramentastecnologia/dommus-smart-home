@@ -5,7 +5,7 @@ import { logout } from "@/services/supabase";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { ProFortunaLogo } from "@/components/ProFortunaLogo";
+import { DommusLogo } from "@/components/DommusLogo";
 
 export function Header() {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ export function Header() {
       <div className="flex items-center justify-between">
         <div className="lg:w-64 flex items-center">
           <div className="w-36 lg:hidden p-2 bg-transparent rounded-md">
-            <ProFortunaLogo className="w-full h-auto" />
+            <DommusLogo className="w-full h-auto" />
           </div>
         </div>
         

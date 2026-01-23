@@ -22,24 +22,17 @@ interface DraggableLeadCardProps {
 }
 
 function DraggableLeadCard({ lead, onClick, onDrop }: DraggableLeadCardProps) {
-  console.log(`**DEBUG** DraggableLeadCard rendering for lead ID: ${lead.id}, status: ${lead.status}`);
-  
   const [{ isDragging }, drag] = useDrag(() => ({
     type: 'LEAD',
-    item: () => {
-      console.log(`**DEBUG** useDrag creating drag item for lead ID: ${lead.id}, status: ${lead.status}`);
-      return { 
-        type: 'LEAD', 
-        id: lead.id, 
-        originalStatus: lead.status 
-      } as DragItem;
-    },
+    item: () => ({
+      type: 'LEAD',
+      id: lead.id,
+      originalStatus: lead.status
+    } as DragItem),
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
   }));
-
-  console.log(`**DEBUG** DraggableLeadCard isDragging: ${isDragging} for lead ID: ${lead.id}`);
 
   return (
     <div 
@@ -195,26 +188,31 @@ export function KanbanBoard({
       console.warn("Encountered null/undefined lead in KanbanBoard");
       return;
     }
-    
+
     if (!lead.status) {
       console.warn(`Lead ${lead.id} has no status property:`, lead);
-      if (leadsByStatus["New"]) {
-        leadsByStatus["New"].push(lead);
-      } else if (leadsByStatus["Other"]) {
-        leadsByStatus["Other"].push(lead);
+      // Tentar colocar no status padrão "Novo" ou no primeiro status disponível
+      if (leadsByStatus["Novo"]) {
+        leadsByStatus["Novo"].push(lead);
+      } else if (defaultStatuses.length > 0 && leadsByStatus[defaultStatuses[0]]) {
+        leadsByStatus[defaultStatuses[0]].push(lead);
       } else {
-        leadsByStatus["Other"] = [lead];
+        if (!leadsByStatus['Outros']) {
+          leadsByStatus['Outros'] = [];
+        }
+        leadsByStatus['Outros'].push(lead);
       }
       return;
     }
-    
+
     if (leadsByStatus[lead.status]) {
       leadsByStatus[lead.status].push(lead);
     } else {
-      if (!leadsByStatus['Other']) {
-        leadsByStatus['Other'] = [];
+      // Status não reconhecido - colocar em "Outros"
+      if (!leadsByStatus['Outros']) {
+        leadsByStatus['Outros'] = [];
       }
-      leadsByStatus['Other'].push(lead);
+      leadsByStatus['Outros'].push(lead);
     }
   });
 
@@ -254,15 +252,15 @@ export function KanbanBoard({
         );
       })}
       
-      {leadsByStatus['Other'] && leadsByStatus['Other'].length > 0 && (
+      {leadsByStatus['Outros'] && leadsByStatus['Outros'].length > 0 && (
         <KanbanColumn
-          title="Other"
-          leads={leadsByStatus['Other']}
-          status="Other"
+          title="Outros"
+          leads={leadsByStatus['Outros']}
+          status={"Outros" as LeadStatus}
           onLeadClick={onLeadClick}
           onDrop={handleDrop}
-          sortOption={columnSortOptions['Other']}
-          onSortChange={(value) => handleSortChange('Other', value)}
+          sortOption={columnSortOptions['Outros'] || 'position_asc'}
+          onSortChange={(value) => handleSortChange('Outros', value)}
         />
       )}
     </div>

@@ -21,7 +21,6 @@ import Catalog from "./pages/Catalog";
 import Instagram from "./pages/Instagram";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
 import ForgotPassword from "./pages/Auth/ForgotPassword";
 import ResetPassword from "./pages/Auth/ResetPassword";
 import Contact from "./pages/Contact";
@@ -126,7 +125,6 @@ const App = () => {
           <Routes>
             {/* Rotas públicas */}
             <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/contact" element={<Contact />} />

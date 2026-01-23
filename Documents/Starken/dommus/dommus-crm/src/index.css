@@ -1,101 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    /* ProFortuna primary color - Teal */
-    --primary: 174 100% 33%;
-    --primary-foreground: 210 40% 98%;
-
-    /* Light teal secondary */
-    --secondary: 187 71% 54%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    /* Light teal accent */
-    --accent: 187 71% 94%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    /* Keep destructive red */
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 174 100% 33%;
-
+    /* Base tokens - always present */
     --radius: 0.75rem;
+    --font-heading: 'Space Grotesk', sans-serif;
+    --font-body: 'Inter', sans-serif;
 
-    /* Sidebar with ProFortuna blue tones */
-    --sidebar-background: 198 100% 36% / 10%;
-    --sidebar-foreground: 198 100% 28%;
-    --sidebar-primary: 198 100% 36%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 198 100% 36% / 20%;
-    --sidebar-accent-foreground: 198 100% 20%;
-    --sidebar-border: 198 33% 91%;
-    --sidebar-ring: 198 100% 36%;
+    /* Custom tokens */
+    --glow-primary: 270 60% 55%;
+    --glow-intensity: 0.4;
+    --gradient-start: 270 70% 50%;
+    --gradient-end: 280 80% 40%;
   }
 
-  .dark {
-    /* Dark navy background from the screenshot */
-    --background: 215 57% 7%;
-    --foreground: 210 40% 98%;
+  /* Light Theme */
+  .light, :root:not(.dark) {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 10%;
 
-    /* Card backgrounds slightly lighter than main background */
-    --card: 215 57% 12%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 98%;
+    --card-foreground: 240 10% 10%;
 
-    /* Popover similar to cards */
-    --popover: 215 57% 12%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 10%;
 
-    /* Increase primary brightness for better visibility in dark mode, mas não tão brilhante */
-    --primary: 174 60% 45%;
+    /* Primary - Purple/Violet (Dommus brand) */
+    --primary: 270 60% 50%;
     --primary-foreground: 0 0% 100%;
 
-    /* Dark mode ProFortuna secondary - blue - menos brilhante */
-    --secondary: 198 80% 45%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 240 5% 92%;
+    --secondary-foreground: 240 10% 20%;
 
-    /* Muted colors for dark theme */
-    --muted: 215 57% 18%;
-    --muted-foreground: 215 20% 75%;
+    --muted: 240 5% 90%;
+    --muted-foreground: 240 5% 45%;
 
-    /* Dark accent colors */
-    --accent: 215 57% 18%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 270 70% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Destructive colors for dark mode */
-    --destructive: 0 62.8% 50%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 240 5% 85%;
+    --input: 240 5% 85%;
+    --ring: 270 60% 50%;
+
+    /* Sidebar - Light theme */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 10% 10%;
+    --sidebar-primary: 270 60% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 5% 92%;
+    --sidebar-accent-foreground: 240 10% 20%;
+    --sidebar-border: 240 5% 85%;
+    --sidebar-ring: 270 60% 50%;
+  }
+
+  /* Dark Theme */
+  .dark {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 95%;
+
+    --card: 240 10% 8%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 240 10% 8%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Primary - Purple/Violet (Dommus brand) */
+    --primary: 270 60% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 10% 12%;
+    --secondary-foreground: 0 0% 90%;
+
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 55%;
+
+    --accent: 270 70% 60%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    /* Border and input colors for dark mode */
-    --border: 215 57% 18%;
-    --input: 215 57% 18%;
-    --ring: 174 76% 55%;
-    
-    /* Dark sidebar - matching the navy theme from screenshot */
-    --sidebar-background: 210 50% 12%;
-    --sidebar-foreground: 210 20% 90%;
-    --sidebar-primary: 174 76% 55%;
+    --border: 240 10% 18%;
+    --input: 240 10% 18%;
+    --ring: 270 60% 55%;
+
+    /* Sidebar - Dark theme */
+    --sidebar-background: 240 10% 6%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 270 60% 55%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 50% 18%;
-    --sidebar-accent-foreground: 210 20% 95%;
-    --sidebar-border: 210 50% 18%;
-    --sidebar-ring: 174 76% 55%;
+    --sidebar-accent: 240 10% 12%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 240 10% 18%;
+    --sidebar-ring: 270 60% 55%;
   }
 }
 
@@ -106,22 +110,165 @@
 
   body {
     @apply bg-background text-foreground;
-    background-image: linear-gradient(180deg, rgba(54, 209, 220, 0.1) 0%, rgba(0, 169, 157, 0.05) 100%);
-    background-attachment: fixed;
+    font-family: var(--font-body);
   }
 
-  /* Remove background gradient in dark mode */
-  .dark body {
-    background-image: none;
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading);
   }
 }
 
-/* Melhorar barras de rolagem no modo escuro */
+@layer components {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+
+  .glow-effect {
+    box-shadow: 0 0 40px hsl(var(--primary) / 0.3),
+                0 0 80px hsl(var(--primary) / 0.15);
+  }
+
+  .glow-text {
+    text-shadow: 0 0 40px hsl(var(--primary) / 0.6),
+                 0 0 80px hsl(var(--primary) / 0.3);
+  }
+
+  .card-glow {
+    @apply relative overflow-hidden;
+  }
+
+  .card-glow::before {
+    content: '';
+    @apply absolute inset-0 opacity-0 transition-opacity duration-500;
+    background: radial-gradient(
+      600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+      hsl(var(--primary) / 0.1),
+      transparent 40%
+    );
+  }
+
+  .card-glow:hover::before {
+    @apply opacity-100;
+  }
+
+  .section-divider {
+    @apply h-px w-full;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      hsl(var(--primary) / 0.3) 50%,
+      transparent
+    );
+  }
+
+  /* Smart home LED pulse effect */
+  .led-pulse {
+    animation: ledPulse 2s ease-in-out infinite;
+  }
+
+  .led-glow {
+    box-shadow: 0 0 10px hsl(var(--primary) / 0.5),
+                0 0 20px hsl(var(--primary) / 0.3),
+                0 0 30px hsl(var(--primary) / 0.1);
+  }
+
+  /* Animated gradient background */
+  .animated-gradient-bg {
+    background: linear-gradient(
+      -45deg,
+      hsl(var(--background)) 0%,
+      hsl(var(--card)) 25%,
+      hsl(var(--background)) 50%,
+      hsl(var(--card)) 75%,
+      hsl(var(--background)) 100%
+    );
+    background-size: 400% 400%;
+    animation: gradientShift 15s ease infinite;
+  }
+
+  /* Icon container with smart home effect */
+  .smart-icon {
+    @apply relative;
+  }
+
+  .smart-icon::after {
+    content: '';
+    @apply absolute inset-0 rounded-xl opacity-0;
+    background: radial-gradient(circle, hsl(var(--primary) / 0.4) 0%, transparent 70%);
+    animation: iconPulse 3s ease-in-out infinite;
+  }
+
+  .smart-icon:hover::after {
+    @apply opacity-100;
+  }
+
+  /* Dommus styled cards */
+  .dommus-card {
+    @apply bg-card rounded-xl shadow-md p-4 border border-border hover:shadow-lg transition-shadow;
+  }
+
+  /* Dommus styled buttons */
+  .dommus-button {
+    @apply rounded-lg px-6 py-2 bg-primary text-primary-foreground font-medium hover:opacity-90 transition-all shadow-sm hover:shadow-glow;
+  }
+
+  /* Dommus styled input */
+  .dommus-input {
+    @apply rounded-lg px-4 py-3 border border-border bg-card text-foreground w-full focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all;
+  }
+
+  /* Dommus icon container */
+  .dommus-icon-container {
+    @apply bg-primary/10 rounded-lg p-2 flex items-center justify-center;
+  }
+
+  /* Dommus gradient text */
+  .dommus-gradient-text {
+    @apply bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent;
+  }
+
+  /* Dommus badge */
+  .dommus-badge {
+    @apply bg-primary/10 text-primary text-xs font-medium rounded-full px-3 py-1;
+  }
+}
+
 @layer utilities {
-  /* Estilizar scrollbar em navegadores webkit */
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+  }
+
+  .animate-fade-in-down {
+    animation: fadeInDown 0.8s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
+
+  .animate-slide-in-left {
+    animation: slideInLeft 0.8s ease-out forwards;
+  }
+
+  .animate-slide-in-right {
+    animation: slideInRight 0.8s ease-out forwards;
+  }
+
+  .animation-delay-100 { animation-delay: 100ms; }
+  .animation-delay-200 { animation-delay: 200ms; }
+  .animation-delay-300 { animation-delay: 300ms; }
+  .animation-delay-400 { animation-delay: 400ms; }
+  .animation-delay-500 { animation-delay: 500ms; }
+  .animation-delay-600 { animation-delay: 600ms; }
+
+  /* Scrollbar thin */
   .scrollbar-thin {
     scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
+    scrollbar-color: hsl(var(--muted)) transparent;
   }
 
   .scrollbar-thin::-webkit-scrollbar {
@@ -138,95 +285,112 @@
     border-radius: 20px;
   }
 
-  .dark .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary) / 30%);
-  }
-
-  /* Scrollbar para elementos horizontais */
-  .scrollbar-horizontal {
-    overflow-x: auto;
-    scrollbar-width: thin;
-    scrollbar-color: var(--border) transparent;
-  }
-
-  .scrollbar-horizontal::-webkit-scrollbar {
-    height: 8px;
-  }
-  
-  .scrollbar-horizontal::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  
-  .scrollbar-horizontal::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--muted));
-    border-radius: 20px;
-  }
-  
-  .dark .scrollbar-horizontal::-webkit-scrollbar-thumb {
-    background-color: hsl(var(--primary) / 30%);
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background-color: hsl(var(--primary) / 0.5);
   }
 }
 
-/* Auth background with ProFortuna gradient */
-.auth-background {
-  background-image: linear-gradient(180deg, rgba(0, 119, 182, 0.05) 0%, rgba(54, 209, 220, 0.2) 100%);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-/* Dark mode auth background */
-.dark .auth-background {
-  background-image: none;
-  background-color: hsl(215 57% 7%);
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Input styles with ProFortuna colors */
-.profortuna-input {
-  @apply rounded-full px-4 py-3 border border-gray-200 bg-white text-gray-800 w-full focus:outline-none focus:ring-2 focus:ring-profortuna-teal focus:border-profortuna-teal transition-all;
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.dark .profortuna-input {
-  @apply border-gray-700 bg-gray-800 text-gray-100;
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
-/* Button styles with ProFortuna colors */
-.profortuna-button {
-  @apply rounded-full px-8 py-3 bg-profortuna-teal text-white font-medium hover:bg-profortuna-blue transition-colors shadow-sm hover:shadow;
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-/* Cards with ProFortuna style */
-.profortuna-card {
-  @apply bg-card rounded-xl shadow-md p-4 border border-border hover:shadow-lg transition-shadow;
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
-/* Icon containers with ProFortuna colors */
-.profortuna-icon-container {
-  @apply bg-primary/10 rounded-lg p-2 flex items-center justify-center;
+@keyframes ledPulse {
+  0%, 100% {
+    opacity: 0.6;
+    box-shadow: 0 0 5px hsl(var(--primary) / 0.3);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 15px hsl(var(--primary) / 0.6), 0 0 30px hsl(var(--primary) / 0.3);
+  }
 }
 
-.profortuna-gradient-text {
-  @apply bg-gradient-to-r from-profortuna-blue to-profortuna-teal bg-clip-text text-transparent;
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
-/* Hover effects */
-.profortuna-hover-effect {
-  @apply transition-all duration-300 hover:scale-105;
+@keyframes iconPulse {
+  0%, 100% { opacity: 0; transform: scale(0.8); }
+  50% { opacity: 0.5; transform: scale(1.2); }
 }
 
-/* Action buttons with ProFortuna colors */
-.profortuna-action-button {
-  @apply rounded-full px-6 py-2 bg-profortuna-teal text-white font-medium hover:bg-profortuna-blue transition-colors shadow-sm flex items-center justify-center gap-2;
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
-/* Badges with ProFortuna colors */
-.profortuna-badge {
-  @apply bg-primary/10 text-primary text-xs font-medium rounded-full px-3 py-1;
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Transition effects */
-.profortuna-transition {
-  @apply transition-all duration-300 ease-in-out;
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--muted));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--primary) / 0.5);
 }

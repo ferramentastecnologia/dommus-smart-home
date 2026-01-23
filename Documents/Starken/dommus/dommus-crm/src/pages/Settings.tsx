@@ -41,6 +41,7 @@ import {
 import { useStatus } from "@/contexts/StatusContext";
 import { LeadSourcesSettings } from "@/components/Settings/LeadSourcesSettings";
 import { ClientStatusSettings } from "@/components/Settings/ClientStatusSettings";
+import { AdminEmailsSettings } from "@/components/Settings/AdminEmailsSettings";
 
 export default function Settings() {
   // User state
@@ -63,11 +64,11 @@ export default function Settings() {
   
   // Company settings state
   const [companySettings, setCompanySettings] = useState({
-    name: "CRM Pro",
-    email: "contact@crmpro.com",
-    phone: "(123) 456-7890",
-    website: "www.crmpro.com",
-    address: ""
+    name: "Dommus Smart Home",
+    email: "contato@dommus.com.br",
+    phone: "(47) 99999-9999",
+    website: "www.dommus.com.br",
+    address: "Blumenau, SC"
   });
   
   // Pipeline tabs state - default to "leads"
@@ -752,11 +753,12 @@ export default function Settings() {
       </div>
       
       <Tabs defaultValue="profile">
-        <TabsList>
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="company">Company</TabsTrigger>
+        <TabsList className="flex-wrap">
+          <TabsTrigger value="profile">Perfil</TabsTrigger>
+          <TabsTrigger value="company">Empresa</TabsTrigger>
           <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
-          <TabsTrigger value="integrations">Integrations</TabsTrigger>
+          <TabsTrigger value="admins">Administradores</TabsTrigger>
+          <TabsTrigger value="integrations">Integrações</TabsTrigger>
         </TabsList>
         
         <TabsContent value="profile" className="space-y-4 mt-6">
@@ -913,7 +915,11 @@ export default function Settings() {
         <TabsContent value="pipeline" className="space-y-4 mt-6">
           {PipelineContent()}
         </TabsContent>
-        
+
+        <TabsContent value="admins" className="space-y-4 mt-6">
+          <AdminEmailsSettings />
+        </TabsContent>
+
         <TabsContent value="integrations" className="space-y-4 mt-6">
           <Card>
             <CardHeader>

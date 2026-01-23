@@ -20,113 +20,60 @@ export function useLeadsData() {
     try {
       setLoading(true);
       console.log('Fetching leads from Supabase...');
-      
+
       // Aguarda o role carregar antes de aplicar filtros
       if (roleLoading) {
         console.log('⏳ Waiting for role to load...');
         return;
       }
-      
-      // Get status mapping for later use
-      const { data: statusesData, error: statusesError } = await supabase
-        .from('lead_statuses')
-        .select('id, name')
-        .order('order_index', { ascending: true });
-        
-      if (statusesError) throw statusesError;
-      
-      // Create a mapping from status_id to status name
-      const statusMap = statusesData.reduce((map, status) => {
-        map[status.id] = status.name;
-        return map;
-      }, {} as Record<string, string>);
-      
-      // Filtro por role - usando o role do hook centralizado
+
+      // Buscar leads com JOIN para statuses (uma única query)
       let query = supabase
         .from('leads')
-        .select('*, lead_statuses!inner(id, name)');
-      
+        .select(`
+          *,
+          lead_statuses(id, name)
+        `);
+
       console.log('🔍 Leads Filter Debug:', { role, userId: user?.id });
       if (role === 'agent' && user) {
         console.log('📝 Applying leads filter for agent (only assigned):', user.id);
-        // Agents veem APENAS leads atribuídos a eles (não veem sem atribuição)
         query = query.eq('agent_id', user.id);
-      }
-      else {
+      } else {
         console.log('👑 Admin/Manager - showing all leads');
       }
-      // Admin e manager veem tudo
+
       const { data, error } = await query;
 
       console.log('Supabase response:', { data: data ? data.length : 0, error });
 
       if (error) throw error;
-      
+
       if (!data || data.length === 0) {
         console.log('No leads found in database.');
         setLeads([]);
         return;
       }
 
-      // Agora vamos buscar os dados complementares em consultas separadas
-      const enhancedLeads = await Promise.all((data || []).map(async (lead) => {
-        // Buscar o agente associado se houver um agent_id
-        let agent = null;
-        if (lead.agent_id) {
-          const { data: agentData } = await supabase
-            .from('agents')
-            .select('id, name')
-            .eq('id', lead.agent_id)
-            .single();
-          
-          if (agentData) {
-            agent = agentData;
-          }
-        }
-        
-        // Contar tarefas
-        let tasksCount = 0;
-        try {
-          const { count } = await supabase
-            .from('tasks')
-            .select('id', { count: 'exact', head: true })
-            .eq('lead_id', lead.id);
-          
-          tasksCount = count || 0;
-        } catch (error) {
-          console.warn("Falha ao consultar tarefas, a tabela pode não existir:", error);
-          // Não propaga o erro
-        }
-        
-        // Contar notas
-        let notesCount = 0;
-        try {
-          const { count } = await supabase
-            .from('notes')
-            .select('id', { count: 'exact', head: true })
-            .eq('lead_id', lead.id);
-          
-          notesCount = count || 0;
-        } catch (error) {
-          console.warn("Falha ao consultar notas, a tabela pode não existir:", error);
-          // Não propaga o erro
-        }
-          
-        return {
-          ...lead,
-          agent,
-          tasksCount: tasksCount,
-          notesCount: notesCount
-        };
+      // Processar leads diretamente sem queries adicionais
+      const enhancedLeads = data.map((lead) => ({
+        ...lead,
+        agent: null, // Agente será carregado lazy se necessário
+        tasksCount: 0,
+        notesCount: 0
       }));
 
       // Convert the data to the expected Lead format
       const formattedLeads = enhancedLeads.map(lead => {
-        // Validar se temos os dados necessários de status
-        if (!lead.lead_statuses || !lead.lead_statuses.name) {
-          console.warn(`Lead ${lead.id} has missing status information:`, lead);
+        // Determinar o status - priorizar lead_statuses.name se disponível,
+        // senão usar o campo status diretamente, senão 'Novo' como fallback
+        let statusName = 'Novo';
+        if (lead.lead_statuses && lead.lead_statuses.name) {
+          statusName = lead.lead_statuses.name;
+        } else if (lead.status) {
+          statusName = lead.status;
         }
-        
+
         return {
           id: lead.id,
           name: lead.name || '',
@@ -134,10 +81,12 @@ export function useLeadsData() {
           phone: lead.phone || '',
           address: lead.address || '',
           company: lead.company || '',
-          status: lead.lead_statuses?.name || 'New', // Use status name from the join, fallback to New
-          statusId: lead.status_id, // Store the status_id for future operations
-          source: lead.source || 'System',
-          sourceId: lead.source_id, // Store the source_id for future operations
+          position: lead.position || '',
+          website: lead.website || '',
+          status: statusName,
+          statusId: lead.status_id,
+          source: lead.source || '',
+          sourceId: lead.source_id,
           agentId: lead.agent_id,
           agent: lead.agent,
           tasksCount: lead.tasksCount,
@@ -163,11 +112,11 @@ export function useLeadsData() {
           id: "1",
           name: "Pedro Oliveira",
           email: "pedro@email.com",
-          phone: "555-123-4567",
+          phone: "(47) 99999-1234",
           address: "Av. Paulista, 1000, São Paulo",
           company: "Tech Solutions",
-          status: "Qualified",
-          source: "Website",
+          status: "Qualificado",
+          source: "Site",
           createdAt: new Date(),
           updatedAt: new Date(),
           lastInteraction: new Date()
@@ -175,12 +124,12 @@ export function useLeadsData() {
         {
           id: "2",
           name: "João Silva",
-          email: "joao@email.com", 
-          phone: "555-765-4321",
+          email: "joao@email.com",
+          phone: "(47) 99999-5678",
           address: "Rua Augusta, 500, São Paulo",
           company: "Marketing Pro",
-          status: "New",
-          source: "Referral",
+          status: "Novo",
+          source: "Indicação",
           createdAt: new Date(),
           updatedAt: new Date(),
           lastInteraction: new Date()
@@ -189,17 +138,17 @@ export function useLeadsData() {
           id: "3",
           name: "Maria Santos",
           email: "maria@email.com",
-          phone: "555-987-6543",
+          phone: "(47) 99999-9012",
           address: "Av. Rebouças, 300, São Paulo",
           company: "Design Agency",
-          status: "Proposal",
-          source: "Email",
+          status: "Proposta",
+          source: "Instagram",
           createdAt: new Date(),
           updatedAt: new Date(),
           lastInteraction: new Date()
         }
       ];
-      
+
       console.log('Using fallback mock leads:', mockLeads);
       setLeads(mockLeads);
     } finally {
@@ -240,72 +189,67 @@ export function useLeadsData() {
   };
 
   const handleStatusChange = async (leadId: string, status: LeadStatus) => {
+    console.log(`🔄 handleStatusChange: lead=${leadId}, newStatus=${status}`);
+
+    // 1. Atualização otimista local primeiro (UI imediata)
+    const currentLeads = [...leads];
+    const leadIndex = currentLeads.findIndex(l => l.id === leadId);
+
+    if (leadIndex !== -1) {
+      // Atualiza UI imediatamente
+      const updatedLeads = [...currentLeads];
+      updatedLeads[leadIndex] = { ...updatedLeads[leadIndex], status };
+      setLeads(updatedLeads);
+      console.log(`✅ UI atualizada para lead ${leadId}`);
+    }
+
     try {
-      console.log(`Changing lead ${leadId} status to ${status}`);
-      
-      // Make a local copy of the current leads before making any changes
-      const currentLeads = [...leads];
-      console.log("Current leads count before update:", currentLeads.length);
-      
-      // Verifique se o lead existe no estado local
-      const leadToUpdate = currentLeads.find(l => l.id === leadId);
-      if (!leadToUpdate) {
-        console.warn(`Lead with ID ${leadId} not found in local state. Cannot update status locally.`);
-        // Não retorne aqui, tente atualizar no banco de dados mesmo assim
-      } else {
-        console.log(`Found lead to update: ${leadToUpdate.name}, current status: ${leadToUpdate.status}`);
-      }
-      
-      // First, get the status_id from the status name
-      const { data: statusData, error: statusError } = await supabase
+      // 2. Buscar status_id (opcional)
+      let statusId: string | null = null;
+      const { data: statusData } = await supabase
         .from('lead_statuses')
         .select('id')
         .eq('name', status)
-        .single();
-        
-      if (statusError) {
-        console.error('Error getting status_id:', statusError);
-        throw statusError;
-      }
-      
-      console.log(`Got status_id ${statusData.id} for status ${status}`);
+        .maybeSingle();
 
-      // Update in database
-      const { data, error } = await supabase
+      if (statusData) {
+        statusId = statusData.id;
+        console.log(`📌 Status ID encontrado: ${statusId}`);
+      } else {
+        console.log(`⚠️ Status "${status}" não encontrado na tabela, usando apenas campo texto`);
+      }
+
+      // 3. Atualizar no banco
+      const updatePayload: Record<string, any> = {
+        status: status,
+        updated_at: new Date().toISOString()
+      };
+
+      if (statusId) {
+        updatePayload.status_id = statusId;
+      }
+
+      const { error } = await supabase
         .from('leads')
-        .update({ status_id: statusData.id })
-        .eq('id', leadId)
-        .select('*')
-        .single();
+        .update(updatePayload)
+        .eq('id', leadId);
 
       if (error) {
-        console.error('Error updating lead status:', error);
-        throw error;
-      }
-      
-      console.log(`Successfully updated lead ${leadId} to status ${status}`, data);
-
-      // Se não encontramos o lead no estado local, vamos recarregar todos os leads
-      if (!leadToUpdate) {
-        console.log('Lead not found in local state, reloading all leads...');
-        await fetchLeads();
+        console.error('❌ Erro no Supabase:', error);
+        // Reverter UI em caso de erro
+        setLeads(currentLeads);
+        toast.error(`Erro ao atualizar: ${error.message}`);
         return;
       }
 
-      // Update local state with new status
-      const updatedLeads = currentLeads.map(lead => 
-        lead.id === leadId ? { ...lead, status, statusId: statusData.id } : lead
-      );
-      
-      console.log("Updated leads count:", updatedLeads.length);
-      
-      // Set the updated array to state
-      setLeads(updatedLeads);
-    } catch (err) {
-      console.error('Error updating lead status:', err);
-      toast.error('Failed to update lead status');
-      // Recarregar leads para garantir sincronização
-      await fetchLeads();
+      console.log(`✅ Lead ${leadId} atualizado no banco para status "${status}"`);
+      toast.success(`Status atualizado para ${status}`);
+
+    } catch (err: any) {
+      console.error('❌ Exceção:', err);
+      // Reverter UI em caso de erro
+      setLeads(currentLeads);
+      toast.error('Falha ao atualizar status do lead');
     }
   };
 
@@ -337,7 +281,7 @@ export function useLeadsData() {
       const { data: statusData, error: statusError } = await supabase
         .from('lead_statuses')
         .select('id')
-        .eq('name', newLead.status || 'New')
+        .eq('name', newLead.status || 'Novo')
         .single();
         
       if (statusError) throw statusError;
@@ -377,17 +321,19 @@ export function useLeadsData() {
       const supabaseLead = {
         id: newLead.id,
         name: newLead.name,
-        email: newLead.email,
+        email: newLead.email || '',
         phone: newLead.phone || '',
         address: newLead.address || '',
         company: newLead.company || '',
-        status_id: statusData.id, // Use status_id instead of status
-        source: newLead.source || 'Website', // Usar diretamente o campo source como texto
-        agent_id: agent_id, // Use the agent_id we fetched
-        assigned_to: assigned_to, // Use the assigned_to we determined
-        created_at: newLead.createdAt?.toISOString() || new Date().toISOString(),
-        updated_at: newLead.updatedAt?.toISOString() || new Date().toISOString(),
-        last_interaction: newLead.lastInteraction?.toISOString()
+        position: newLead.position || '',
+        website: newLead.website || '',
+        status: newLead.status || 'Novo', // Campo texto para fallback
+        status_id: statusData.id, // UUID do status
+        source: newLead.source || '',
+        agent_id: agent_id,
+        assigned_to: assigned_to,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
       };
       
       console.log("Formatted lead for Supabase:", supabaseLead);
@@ -395,7 +341,7 @@ export function useLeadsData() {
       const { data, error } = await supabase
         .from('leads')
         .insert(supabaseLead)
-        .select('*, lead_statuses!inner(id, name)')
+        .select('*, lead_statuses(id, name)')
         .single();
 
       if (error) {
@@ -404,24 +350,32 @@ export function useLeadsData() {
       }
 
       console.log("Successfully added lead, response:", data);
-      
+
+      // Determinar o status name
+      let statusName = newLead.status || 'Novo';
+      if (data.lead_statuses && data.lead_statuses.name) {
+        statusName = data.lead_statuses.name;
+      }
+
       // Convert back to our Lead format
       const newFormattedLead: Lead = {
         id: data.id,
         name: data.name,
-        email: data.email,
+        email: data.email || '',
         phone: data.phone || '',
         address: data.address || '',
         company: data.company || '',
-        status: data.lead_statuses.name, // Use status name from the join
+        position: data.position || '',
+        website: data.website || '',
+        status: statusName,
         statusId: data.status_id,
-        source: data.source || 'Website',
+        source: data.source || '',
         agentId: data.agent_id,
         createdAt: new Date(data.created_at),
         updatedAt: new Date(data.updated_at),
         lastInteraction: data.last_interaction ? new Date(data.last_interaction) : undefined
       };
-      
+
       setLeads(prev => [newFormattedLead, ...prev]);
       return newFormattedLead;
     } catch (err) {
@@ -595,49 +549,62 @@ export function useLeadsData() {
   const updateLeadStatus = async (leadId: string, newStatus: string) => {
     try {
       console.log(`**ATUALIZAÇÃO** Atualizando status do lead ${leadId} para ${newStatus}`);
-      
+
       // 1. Verificar se o ID é válido
       if (!leadId) {
         console.error("ID do lead inválido");
         return null;
       }
-      
-      // 2. Obter o status_id para o status
-      const { data: statusData, error: statusError } = await supabase
-        .from('lead_statuses')
-        .select('id')
-        .eq('name', newStatus)
-        .single();
-        
-      if (statusError) {
-        console.error("Erro ao obter status_id:", statusError);
-        throw statusError;
+
+      // 2. Tentar obter o status_id para o status (mas não falhar se não encontrar)
+      let statusId: string | null = null;
+      try {
+        const { data: statusData, error: statusError } = await supabase
+          .from('lead_statuses')
+          .select('id')
+          .eq('name', newStatus)
+          .single();
+
+        if (statusError) {
+          console.warn("Status não encontrado na tabela lead_statuses:", statusError.message);
+          console.log("Continuando com atualização apenas do campo 'status'...");
+        } else if (statusData) {
+          statusId = statusData.id;
+          console.log(`Status ID para ${newStatus}: ${statusId}`);
+        }
+      } catch (err) {
+        console.warn("Erro ao buscar status_id, usando fallback:", err);
       }
-      
-      const statusId = statusData.id;
-      console.log(`Status ID para ${newStatus}: ${statusId}`);
-      
-      // 3. Atualizar o banco de dados PRIMEIRO
+
+      // 3. Atualizar o banco de dados
       console.log(`Enviando atualização para o banco...`);
-      
-      // Atualização DIRETA e SIMPLES no banco - apenas o necessário
+
+      // Preparar dados de atualização - sempre atualiza o campo 'status' string
+      // e opcionalmente o status_id se encontrado
+      const updateData: any = {
+        status: newStatus, // Sempre atualizar o campo de texto
+        updated_at: new Date().toISOString()
+      };
+
+      // Só incluir status_id se foi encontrado
+      if (statusId) {
+        updateData.status_id = statusId;
+      }
+
       const { data, error } = await supabase
         .from('leads')
-        .update({ 
-          status_id: statusId,
-          updated_at: new Date().toISOString()
-        })
+        .update(updateData)
         .eq('id', leadId)
-        .select(`*, lead_statuses(*)`)
+        .select('*')
         .single();
-        
+
       if (error) {
         console.error("Erro na atualização:", error);
         throw error;
       }
-      
+
       console.log(`Banco atualizado com sucesso:`, data);
-      
+
       // 4. Atualizar o cache local
       const updatedLeads = leads.map(lead => {
         if (lead.id === leadId) {
@@ -645,21 +612,21 @@ export function useLeadsData() {
           return {
             ...lead,
             status: newStatus,
-            statusId: statusId,
+            statusId: statusId || lead.statusId,
             updatedAt: new Date()
           };
         }
         return lead;
       });
-      
+
       // 5. Atualizar o estado com todos os leads atualizados
       setLeads(updatedLeads);
-      
+
       // 6. Fazer um fetchLeads para sincronizar tudo (opcional)
       setTimeout(() => {
         fetchLeads().catch(err => console.error("Erro ao recarregar leads:", err));
       }, 500);
-      
+
       return data;
     } catch (error) {
       console.error("Erro na atualização de status:", error);

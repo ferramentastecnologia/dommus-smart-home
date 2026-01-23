@@ -1,8 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +30,9 @@ import {
 } from "lucide-react";
 import { useInstagramPosts } from "@/hooks/useInstagramPosts";
 import { Skeleton } from "@/components/ui/skeleton";
+import { EditInstagramPostDialog } from "./EditInstagramPostDialog";
+import { InstagramPost } from "@/types/crm";
+import { toast } from "sonner";
 
 interface InstagramPostsGridProps {
   searchTerm: string;
@@ -32,7 +45,40 @@ export function InstagramPostsGrid({
   categoryFilter,
   sectionFilter,
 }: InstagramPostsGridProps) {
-  const { posts, loading, deletePost, togglePostActive } = useInstagramPosts();
+  const { posts, loading, deletePost, togglePostActive, fetchPosts } = useInstagramPosts();
+
+  const [selectedPost, setSelectedPost] = useState<InstagramPost | null>(null);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [postToDelete, setPostToDelete] = useState<InstagramPost | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleEdit = (post: InstagramPost) => {
+    setSelectedPost(post);
+    setShowEditDialog(true);
+  };
+
+  const handleDeleteClick = (post: InstagramPost) => {
+    setPostToDelete(post);
+    setShowDeleteConfirm(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!postToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      await deletePost(postToDelete.id);
+      toast.success("Post excluído com sucesso!");
+      setShowDeleteConfirm(false);
+      setPostToDelete(null);
+    } catch (error) {
+      console.error("Error deleting post:", error);
+      toast.error("Erro ao excluir post");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   const filteredPosts = posts.filter((post) => {
     const matchesSearch =
@@ -172,7 +218,7 @@ export function InstagramPostsGrid({
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleEdit(post)}>
                     <Edit className="mr-2 h-4 w-4" />
                     Editar
                   </DropdownMenuItem>
@@ -184,7 +230,7 @@ export function InstagramPostsGrid({
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     className="text-destructive"
-                    onClick={() => deletePost(post.id)}
+                    onClick={() => handleDeleteClick(post)}
                   >
                     <Trash2 className="mr-2 h-4 w-4" />
                     Excluir
@@ -195,6 +241,37 @@ export function InstagramPostsGrid({
           </CardContent>
         </Card>
       ))}
+
+      {/* Edit Post Dialog */}
+      <EditInstagramPostDialog
+        post={selectedPost}
+        open={showEditDialog}
+        onOpenChange={setShowEditDialog}
+        onSave={() => fetchPosts()}
+      />
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={showDeleteConfirm} onOpenChange={setShowDeleteConfirm}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir post?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir este post do Instagram?
+              Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              disabled={isDeleting}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isDeleting ? "Excluindo..." : "Excluir"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -139,8 +139,8 @@ export function AddTaskDialog({ open, onOpenChange, onAddTask, agents, leads }: 
                   {!newTask.assignedTo
                     ? "Select agent"
                     : agents && agents.length > 0
-                      ? (agents.find((agent) => agent.name === newTask.assignedTo)?.name || newTask.assignedTo)
-                      : newTask.assignedTo}
+                      ? (agents.find((agent) => agent.id === newTask.assignedTo)?.name || "Select agent")
+                      : "Select agent"}
                   <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
               </PopoverTrigger>
@@ -170,14 +170,14 @@ export function AddTaskDialog({ open, onOpenChange, onAddTask, agents, leads }: 
                           key={agent.id}
                           value={agent.name}
                           onSelect={() => {
-                            setNewTask({ ...newTask, assignedTo: agent.name });
+                            setNewTask({ ...newTask, assignedTo: agent.id });
                             setOpenAgentCombobox(false);
                           }}
                         >
                           <Check
                             className={cn(
                               "mr-2 h-4 w-4",
-                              newTask.assignedTo === agent.name ? "opacity-100" : "opacity-0"
+                              newTask.assignedTo === agent.id ? "opacity-100" : "opacity-0"
                             )}
                           />
                           <div className="flex flex-col">
