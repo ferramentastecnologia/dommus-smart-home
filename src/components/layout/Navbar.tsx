@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { cn, getWhatsAppLink } from "@/lib/utils";
 
 const navLinks = [
   { href: "#sobre", label: "Sobre" },
@@ -57,7 +57,7 @@ const Navbar = () => {
               </a>
             ))}
             <Button variant="glow" size="sm" asChild>
-              <a href="#contato">Contato</a>
+              <a href={getWhatsAppLink("navbarContato")} target="_blank" rel="noopener noreferrer">Contato</a>
             </Button>
           </div>
 
@@ -86,7 +86,7 @@ const Navbar = () => {
                 </a>
               ))}
               <Button variant="glow" className="w-full mt-4" size="lg" asChild>
-                <a href="#contato" onClick={() => setIsMobileMenuOpen(false)}>
+                <a href={getWhatsAppLink("navbarContato")} target="_blank" rel="noopener noreferrer" onClick={() => setIsMobileMenuOpen(false)}>
                   Contato
                 </a>
               </Button>

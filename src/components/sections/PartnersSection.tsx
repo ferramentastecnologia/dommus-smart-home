@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Handshake } from "lucide-react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { getWhatsAppLink } from "@/lib/utils";
 
 const PartnersSection = () => {
   return (
@@ -44,7 +45,7 @@ const PartnersSection = () => {
 
                 <ScrollReveal animation="fade-up" delay={300}>
                   <Button variant="premium" size="lg" className="group" asChild>
-                    <a href="#contato">
+                    <a href={getWhatsAppLink("parceiros")} target="_blank" rel="noopener noreferrer">
                       Quero ser parceiro
                       <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
                     </a>

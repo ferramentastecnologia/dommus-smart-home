@@ -1,4 +1,5 @@
 import { Instagram, MessageCircle, MapPin } from "lucide-react";
+import { getWhatsAppLink } from "@/lib/utils";
 
 const Footer = () => {
   return (
@@ -34,7 +35,7 @@ const Footer = () => {
             </a>
 
             <a
-              href="https://wa.me/5547920565215"
+              href={getWhatsAppLink("footerWhatsapp")}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors duration-300 group"

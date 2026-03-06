@@ -4,6 +4,7 @@ import heroImageGlow from "@/assets/hero-home-theater-glow.png";
 import heroImageGlowLight from "@/assets/hero-home-theater-glow-light.png";
 import { useState, useMemo } from "react";
 import ParallaxSection from "@/components/ui/ParallaxSection";
+import { getWhatsAppLink } from "@/lib/utils";
 
 const HeroSection = () => {
   const [lightOn, setLightOn] = useState(false);
@@ -117,10 +118,10 @@ const HeroSection = () => {
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up animation-delay-300">
           <Button variant="hero" size="lg" asChild>
-            <a href="#contato">Solicitar projeto</a>
+            <a href={getWhatsAppLink("heroSolicitarProjeto")} target="_blank" rel="noopener noreferrer">Solicitar projeto</a>
           </Button>
           <Button variant="heroOutline" size="lg" asChild>
-            <a href="#contato">Falar com especialista</a>
+            <a href={getWhatsAppLink("heroFalarEspecialista")} target="_blank" rel="noopener noreferrer">Falar com especialista</a>
           </Button>
         </div>
 
