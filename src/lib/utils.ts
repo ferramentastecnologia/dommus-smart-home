@@ -11,13 +11,13 @@ export const whatsappMessages = {
   navbarContato:
     "Olá! Vim pelo site da Dommus Smart Home e quero falar com a equipe sobre automação residencial.",
   heroSolicitarProjeto:
-    "Olá! Vim pela landing page e quero solicitar um projeto personalizado de automação para meu espaço.",
+    "Olá! Vim pela landing page e gostaria de solicitar um projeto personalizado de som e automação para o meu espaço. Vocês podem me orientar sobre os próximos passos?",
   heroFalarEspecialista:
     "Olá! Vim pela landing page e gostaria de falar com um especialista para entender a melhor solução para meu caso.",
   parceiros:
     "Olá! Sou arquiteto(a)/construtora e tenho interesse em parceria com a Dommus Smart Home. Podemos conversar?",
   ctaFalarWhatsapp:
-    "Olá! Vim pela landing page da Dommus Smart Home e quero descobrir a solução ideal para meu projeto.",
+    "Olá! Vim pela landing page e gostaria de solicitar um projeto personalizado de som e automação para o meu espaço.",
   ctaVerSolucoes:
     "Olá! Vim pela landing page e quero conhecer as soluções da Dommus Smart Home (automação, áudio, vídeo e infraestrutura).",
   footerWhatsapp:
